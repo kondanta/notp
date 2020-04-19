@@ -14,52 +14,32 @@
 
 //! some doc
 
+use crate::file::{
+    read,
+    read_secret,
+    write_into_file,
+};
+use crate::otp::OTP;
+#[macro_use]
+extern crate magic_crypt;
+
 mod cli_args;
+mod file;
 mod otp;
 mod util;
-
-use crate::util::get_folder_path;
-use std::io::Error;
-
-use oath::{
-    totp_raw_now,
-    HashType,
-};
-
-use std::{
-    fs,
-    io,
-};
-
-fn read_secret() -> Result<String, Error> {
-    let mut line = String::new();
-    io::stdin().read_line(&mut line)?;
-    Ok(line)
-}
-
-fn create_file() -> Result<(), Error> {
-    let line = read_secret()?;
-    if let Some(totp_folder_path) = get_folder_path("totp") {
-        let totp_file = format!("{}/{}", totp_folder_path, "totp");
-        fs::write(totp_file, line).expect("Cannot write into file");
-        return Ok(());
-    }
-    Ok(())
-}
 
 fn main() {
     let token =
         "NRNM7KGFTR6SUMPBAEMBETM2WGKVUWHH6Y4VEGNPZON3GMVXBHFJV4PJZRFBUXWD";
 
-    let decode_token =
-        base32::decode(base32::Alphabet::RFC4648 { padding: false }, token)
-            .unwrap();
+    let otp = OTP::new(token);
+    print!("{}", otp.generate_otp());
 
-    let auth = totp_raw_now(&decode_token, 6, 0, 30, &HashType::SHA1);
+    // write_into_file();
+    match read() {
+        Ok(_) => println!("OK"),
+        Err(e) => println!("Err: {}", e.to_string()),
+    }
 
-    // print!("{}", utc);
-
-    print!("{}", auth);
-
-    // create_file();
+    // read();
 }
