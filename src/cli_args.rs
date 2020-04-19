@@ -15,6 +15,10 @@ pub(crate) struct Opt {
     /// Remove existing OTP secret
     #[structopt(short, long)]
     pub delete: Option<String>,
+
+    /// Initialize the totp file with password.
+    #[structopt(short, long)]
+    pub init: Option<bool>,
 }
 
 impl Opt {
