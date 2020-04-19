@@ -19,14 +19,13 @@ mod otp;
 mod util;
 
 use crate::util::get_folder_path;
-use std::io::prelude::*;
 use std::io::Error;
 
-use crate::otp::TOTP;
-use std::time::{
-    SystemTime,
-    UNIX_EPOCH,
+use oath::{
+    totp_raw_now,
+    HashType,
 };
+
 use std::{
     fs,
     io,
@@ -52,22 +51,15 @@ fn main() {
     let token =
         "NRNM7KGFTR6SUMPBAEMBETM2WGKVUWHH6Y4VEGNPZON3GMVXBHFJV4PJZRFBUXWD";
 
-    let auth = TOTP::new(token);
+    let decode_token =
+        base32::decode(base32::Alphabet::RFC4648 { padding: false }, token)
+            .unwrap();
 
-    let code = auth.generate(
-        30,
-        SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_nanos() as u64,
-    );
+    let auth = totp_raw_now(&decode_token, 6, 0, 30, &HashType::SHA1);
 
-    print!("{}", SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_nanos() as u64 / 30e9 as u64);
+    // print!("{}", utc);
 
-    //print!("{}", code);
+    print!("{}", auth);
 
     // create_file();
 }

@@ -1,13 +1,8 @@
 use dirs;
-use std::fs::File;
-use std::io::Error;
+use std::fs;
 use std::path::{
     Path,
     PathBuf,
-};
-use std::{
-    env,
-    fs,
 };
 
 /// Checks if the given path exists or not.
@@ -28,7 +23,7 @@ pub fn create_folder(path: &str) {
     if !is_path_exists(path) {
         if let Some(p) = get_config_dir() {
             let totp_path = format!("{}/{}", p.to_str().unwrap(), path);
-            fs::create_dir_all(&totp_path).is_ok();
+            let _ = fs::create_dir_all(&totp_path).is_ok();
         }
     }
 }
