@@ -71,6 +71,14 @@ impl<'a> Crypt<'a> {
         }
         Ok(())
     }
+
+    pub(crate) fn get_raw_data(&self) -> &Vec<String> {
+        &self.raw_data
+    }
+
+    pub(crate) fn get_encrypted_data(&self) -> &Vec<String> {
+        &self.secrets
+    }
 }
 
 pub(crate) fn read_secret() -> Result<String, Error> {
