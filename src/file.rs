@@ -13,7 +13,8 @@ use std::io::{
 
 pub(crate) struct Crypt<'a> {
     key:     &'a str,
-    secrets: Vec<Vec<String>>,
+    secrets: Vec<String>,
+    raw_data: Vec<String>,
 }
 
 impl<'a> Crypt<'a> {
@@ -21,6 +22,7 @@ impl<'a> Crypt<'a> {
         Self {
             key:     "secretkey",
             secrets: Vec::new(),
+            raw_data: Vec::new(),
         }
     }
 
@@ -46,30 +48,25 @@ impl<'a> Crypt<'a> {
     }
 
     pub(crate) fn read(&mut self) -> Result<(), Error> {
-
         if let Some(totp_file) = get_totp_file_path() {
             let file = OpenOptions::new().read(true).open(totp_file)?;
-
             let mut s: String = String::new();
             let mut buf_reader = BufReader::new(file);
             buf_reader.read_to_string(&mut s)?;
 
-            let mut test = Vec::new();
-            test.push("fA2Sk4la9fHJZ9uvldR/5A==");
-            test.push("QbalQ1uW8hNVEuRcFrhSDg==");
-            test.push("KlqOy9dqAfNcieXSJeH5Gw==");
+            self.secrets = s.trim().split(",").map(|s| s.to_string()).collect();
+            // remove last empty field right after the last element.
+            self.secrets.pop();
 
-            self.secrets = s.lines()
-                .map(|s| s.trim().split(',').map(String::from).collect::<Vec<_>>())
+            self.raw_data = self
+                .secrets
+                .iter()
+                .map(|data| {
+                    let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
+                    mc.decrypt_base64_to_string(data)
+                        .unwrap_or(String::from(""))
+                })
                 .collect::<Vec<_>>();
-            println!("{:#?}", self.secrets);
-
-            let eminem = self.secrets[0].iter().map(|data| {
-                let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
-                mc.decrypt_base64_to_string(data.trim()).unwrap()
-            }).collect::<Vec<_>>();
-
-            println!("{:#?}", eminem);
             return Ok(());
         }
         Ok(())
