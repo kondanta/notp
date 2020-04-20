@@ -15,9 +15,8 @@
 //! some doc
 
 use crate::file::{
-    read,
     read_secret,
-    write_into_file,
+    Crypt,
 };
 use crate::otp::OTP;
 #[macro_use]
@@ -33,10 +32,12 @@ fn main() {
         "NRNM7KGFTR6SUMPBAEMBETM2WGKVUWHH6Y4VEGNPZON3GMVXBHFJV4PJZRFBUXWD";
 
     let otp = OTP::new(token);
-    print!("{}", otp.generate_otp());
+    println!("{}", otp.generate_otp());
 
-    // write_into_file();
-    match read() {
+    let mut c = Crypt::new();
+
+    // c.write_into_file();
+    match c.read() {
         Ok(_) => println!("OK"),
         Err(e) => println!("Err: {}", e.to_string()),
     }
