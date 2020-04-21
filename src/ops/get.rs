@@ -11,7 +11,7 @@ pub(crate) fn get(
     let mut c = Crypt::new(key);
     let _ = c.read()?;
 
-    let map = mapify(c.get_raw_data().to_vec(), "|", name);
+    let map = mapify(&c.get_raw_data().to_vec(), "|", name);
     show(map);
     Ok(())
 }
@@ -32,7 +32,7 @@ fn show(map: HashMap<String, String>) {
 
 /// Takes vector and makes it HashMap.
 fn mapify(
-    data: Vec<String>,
+    data: &Vec<String>,
     pat: &str,
     target: &str,
 ) -> HashMap<String, String> {
@@ -72,7 +72,7 @@ mod tests {
     #[test]
     fn vector_to_map() {
         let v = vec![String::from("Key2=Value"), String::from("Key=Value")];
-        let map = mapify(v, "=", "Key");
+        let map = mapify(&v, "=", "Key");
         for e in map {
             assert_eq!("Key", e.0);
             assert_eq!("Value", e.1);
