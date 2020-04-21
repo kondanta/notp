@@ -5,7 +5,6 @@ use std::path::{
 };
 
 /// Checks if the given path exists or not
-#[allow(unused)]
 pub fn is_path_exists(path: &str) -> bool {
     if let Some(p) = get_config_dir() {
         let totp_path = format!("{}/{}", p.to_str().unwrap_or_default(), path);
@@ -19,7 +18,6 @@ fn get_config_dir() -> Option<PathBuf> {
 }
 
 /// Creates folder inside the config folder.
-#[allow(unused)]
 pub fn create_folder(path: &str) {
     if !is_path_exists(path) {
         if let Some(p) = get_config_dir() {
@@ -36,6 +34,9 @@ pub fn create_folder(path: &str) {
 /// saying `get_folder_path("totp")` and this function will return to the
 /// full path such as `/home/user/.config/totp`.
 pub fn get_folder_path(path: &str) -> Option<String> {
+    if !is_path_exists(path) {
+        create_folder(path);
+    }
     if let Some(p) = get_config_dir() {
         let folder_path =
             format!("{}/{}", p.to_str().unwrap_or_default(), path);
