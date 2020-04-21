@@ -46,3 +46,14 @@ $ totp --key ttaayyllaann --get AWS
 OTP code for the AWS: 442659
 $ 
 ```
+
+Deleting a secret:
+> Since totp does not support deleting a key, you can manually remove the secret from file. Each key has splitted with a
+> comma and the order is the same as the output you see when you use --list command.
+```bash
+# Example for the macOS
+$ cat ~/Library/Preferences/totp/totp
+asldkasld==,lbvkjcksdf==
+$ vim ~/Library/Preferences/totp/totp
+# delete the one that starts lb and and ==. That means you have deleted the 2. key that is listed when --list used.
+```
