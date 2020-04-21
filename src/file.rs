@@ -80,6 +80,7 @@ impl<'a> Crypt<'a> {
         &self.raw_data
     }
 
+    #[allow(unused)]
     pub(crate) fn get_encrypted_data(&self) -> &Vec<String> {
         &self.secrets
     }
