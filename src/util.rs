@@ -1,4 +1,5 @@
 use dirs;
+use std::collections::HashMap;
 use std::fs;
 use std::path::{
     Path,
@@ -41,12 +42,27 @@ pub fn get_folder_path(path: &str) -> Option<String> {
     None
 }
 
+/// Takes vector and makes it HashMap.
+pub(crate) fn mapify(
+    data: Vec<String>,
+    pat: &str,
+) -> HashMap<String, String> {
+    let mut map: HashMap<String, String> = HashMap::new();
+
+    for element in data {
+        let e: Vec<_> = element.split(&pat).collect();
+        map.insert(String::from(e[0]), String::from(e[1]));
+    }
+    map
+}
+
 #[cfg(test)]
 mod tests {
     use crate::util::{
         create_folder,
         get_folder_path,
         is_path_exists,
+        mapify,
     };
 
     #[test]
