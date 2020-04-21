@@ -1,12 +1,12 @@
 use dirs;
-use std::collections::HashMap;
 use std::fs;
 use std::path::{
     Path,
     PathBuf,
 };
 
-/// Checks if the given path exists or not.
+/// Checks if the given path exists or not
+#[allow(unused)]
 pub fn is_path_exists(path: &str) -> bool {
     if let Some(p) = get_config_dir() {
         let totp_path = format!("{}/{}", p.to_str().unwrap(), path);
@@ -20,6 +20,7 @@ fn get_config_dir() -> Option<PathBuf> {
 }
 
 /// Creates folder inside the config folder.
+#[allow(unused)]
 pub fn create_folder(path: &str) {
     if !is_path_exists(path) {
         if let Some(p) = get_config_dir() {
@@ -46,7 +47,6 @@ pub fn get_folder_path(path: &str) -> Option<String> {
 mod tests {
     use crate::util::{
         create_folder,
-        get_folder_path,
         is_path_exists,
     };
 

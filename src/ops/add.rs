@@ -1,8 +1,4 @@
-use crate::file::{
-    read_secret,
-    Crypt,
-};
-
+use crate::file::Crypt;
 use std::io::{
     stdout,
     Error,
@@ -12,9 +8,9 @@ use std::io::{
 /// Adds new secret into data source
 pub(crate) fn add(
     name: String,
-    secret: &str,
+    key: &str,
 ) -> Result<(), Error> {
-    let c = Crypt::new(secret);
+    let c = Crypt::new(key);
     print!("Please enter the secret: ");
     // we need to flush stdout in order to fetch correct input from stdin.
     stdout().flush()?;
