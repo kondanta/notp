@@ -12,6 +12,20 @@ pub(crate) fn list(key: String) -> Result<(), Error> {
     Ok(())
 }
 
+/// Takes vector and makes it HashMap.
+fn mapify(
+    data: Vec<String>,
+    pat: &str,
+) -> HashMap<String, String> {
+    let mut map: HashMap<String, String> = HashMap::new();
+
+    for element in data {
+        let e: Vec<_> = element.split(&pat).collect();
+        map.insert(String::from(e[0]), String::from(e[1]));
+    }
+    map
+}
+
 fn show(map: HashMap<String, String>) {
     let mut ctr = 1;
     for i in map {
