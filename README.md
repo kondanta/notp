@@ -15,8 +15,8 @@ totp --key superSecretKey --get <name>
 ```
 OTP generation only supports 6 digit codes, for now.
 
-totp uses default config path on the OS that you're using. Such as `~/.config` for Linux and `\AppData\Roaming\` for
-Windows and encrypts the file AES with the given key from CLI as an argument.
+totp uses default config path on the OS that you're using. Such as `~/.config/totp` for Linux, `\AppData\Roaming\totp` for
+Windows and `~/Library/Preferences/totp` for iOS and encrypts the file AES with the given key from CLI as an argument.
 
 The default time-based authentication codes are derived from a hash of the key and the current time, 
 so it is important that the system clock have at least one-minute accuracy.
