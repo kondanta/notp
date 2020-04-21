@@ -57,3 +57,9 @@ asldkasld==,lbvkjcksdf==
 $ vim ~/Library/Preferences/totp/totp
 # delete the one that starts lb and and ==. That means you have deleted the 2. key that is listed when --list used.
 ```
+
+Using with CLI:
+```bash
+$ totp --key ttaayyllaann -q --get AWS
+442659
+```

@@ -24,6 +24,10 @@ pub(crate) struct Opt {
     /// Encryption key for the file that totp going to use as a data source.
     #[structopt(long)]
     pub key: String,
+
+    /// Suppresses the OTP output and just prints the code.
+    #[structopt(short, long)]
+    pub quiet: bool,
 }
 
 impl Opt {

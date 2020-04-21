@@ -14,17 +14,21 @@ use std::io::Error;
 pub(crate) fn get(
     name: &str,
     key: &str,
+    quiet: bool,
 ) -> Result<(), Error> {
     let mut c = Crypt::new(key);
     c.read()?;
 
     let map = mapify(&c.get_raw_data().to_vec(), "|", name);
-    show(map);
+    show(map, quiet);
     Ok(())
 }
 
 /// Prints the otp code
-fn show(map: HashMap<String, String>) {
+fn show(
+    map: HashMap<String, String>,
+    quiet: bool,
+) {
     if map.is_empty() {
         println!(
             "Could not find the service you want. Consider using --list to \
@@ -34,7 +38,14 @@ fn show(map: HashMap<String, String>) {
     }
     for e in map {
         let otp = OTP::new(&e.1);
-        println!("OTP code for the {}: {}", e.0, otp.generate_otp(6, 0, 30))
+        match quiet {
+            true => println!("{}", otp.generate_otp(6, 0, 30)),
+            false => println!(
+                "OTP code for the {}: {}",
+                e.0,
+                otp.generate_otp(6, 0, 30)
+            ),
+        }
     }
 }
 

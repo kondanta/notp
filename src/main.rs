@@ -40,7 +40,7 @@ fn main() {
     let key = &opt.key;
 
     if let Some(name) = opt.get {
-        let _ = get(&name, key);
+        let _ = get(&name, key, opt.quiet);
     } else if opt.list {
         let _ = list(key);
     } else if let Some(name) = opt.add {
