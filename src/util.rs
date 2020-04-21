@@ -42,27 +42,12 @@ pub fn get_folder_path(path: &str) -> Option<String> {
     None
 }
 
-/// Takes vector and makes it HashMap.
-pub(crate) fn mapify(
-    data: Vec<String>,
-    pat: &str,
-) -> HashMap<String, String> {
-    let mut map: HashMap<String, String> = HashMap::new();
-
-    for element in data {
-        let e: Vec<_> = element.split(&pat).collect();
-        map.insert(String::from(e[0]), String::from(e[1]));
-    }
-    map
-}
-
 #[cfg(test)]
 mod tests {
     use crate::util::{
         create_folder,
         get_folder_path,
         is_path_exists,
-        mapify,
     };
 
     #[test]
@@ -79,15 +64,5 @@ mod tests {
     fn should_create_totp_folder() {
         create_folder("totp");
         assert_eq!(true, is_path_exists("totp"));
-    }
-
-    #[test]
-    fn vector_to_map() {
-        let v = vec![String::from("Key=Value")];
-        let map = mapify(v, "=");
-        for e in map {
-            assert_eq!("Key", e.0);
-            assert_eq!("Value", e.1);
-        }
     }
 }
