@@ -34,7 +34,7 @@ fn show(map: HashMap<String, String>) {
     }
     for e in map {
         let otp = OTP::new(&e.1);
-        println!("{}'s code: {}", e.0, otp.generate_otp(6, 0, 30))
+        println!("OTP code for the {}: {}", e.0, otp.generate_otp(6, 0, 30))
     }
 }
 
