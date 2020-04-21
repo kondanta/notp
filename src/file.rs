@@ -70,7 +70,7 @@ impl<'a> Crypt<'a> {
             let mut buf_reader = BufReader::new(file);
             buf_reader.read_to_string(&mut s)?;
 
-            self.secrets = s.trim().split(",").map(|s| s.to_string()).collect();
+            self.secrets = s.trim().split(',').map(|s| s.to_string()).collect();
             // remove last empty field right after the last element.
             self.secrets.pop();
 
@@ -80,7 +80,7 @@ impl<'a> Crypt<'a> {
                 .map(|data| {
                     let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
                     mc.decrypt_base64_to_string(data)
-                        .unwrap_or(String::from(""))
+                        .unwrap_or_else(|_| String::from(""))
                 })
                 .collect::<Vec<_>>();
             return Ok(());
