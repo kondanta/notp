@@ -16,7 +16,7 @@ pub(crate) fn get(
     key: &str,
 ) -> Result<(), Error> {
     let mut c = Crypt::new(key);
-    let _ = c.read()?;
+    c.read()?;
 
     let map = mapify(&c.get_raw_data().to_vec(), "|", name);
     show(map);
@@ -40,7 +40,7 @@ fn show(map: HashMap<String, String>) {
 
 /// Takes vector and makes it HashMap.
 fn mapify(
-    data: &Vec<String>,
+    data: &[String],
     pat: &str,
     target: &str,
 ) -> HashMap<String, String> {

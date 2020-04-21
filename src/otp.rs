@@ -1,4 +1,3 @@
-use oath;
 use oath::{
     totp_raw_now,
     HashType,
