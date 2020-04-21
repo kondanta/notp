@@ -6,14 +6,14 @@ pub(crate) fn list(key: &str) -> Result<(), Error> {
     let mut c = Crypt::new(key);
     let _ = c.read()?;
 
-    let mapped = mapify(c.get_raw_data().to_vec(), "|");
+    let mapped = mapify(&c.get_raw_data().to_vec(), "|");
     show(mapped);
     Ok(())
 }
 
 /// Takes vector and makes it HashMap.
 fn mapify(
-    data: Vec<String>,
+    data: &Vec<String>,
     pat: &str,
 ) -> HashMap<String, String> {
     let mut map: HashMap<String, String> = HashMap::new();
