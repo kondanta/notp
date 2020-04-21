@@ -12,7 +12,12 @@
 )]
 #![warn(rust_2018_idioms)]
 
-//! some doc
+//! This tool simply generates One Time Password using the given, then saved,
+//! 2FA secret code.
+//!
+//! It uses AES encryption to hide 2FA secret codes. Each request requires aes
+//! key(--key option) So make sure you don't lose your key since this tool does
+//! not save the aes key itself.
 
 #[macro_use]
 extern crate magic_crypt;

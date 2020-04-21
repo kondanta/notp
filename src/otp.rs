@@ -22,7 +22,12 @@ impl OTP {
     }
 
     /// Generates 6 digit one time password.
-    pub(crate) fn generate_otp(&self) -> u64 {
-        totp_raw_now(&self.secret, 6, 0, 30, &HashType::SHA1)
+    pub(crate) fn generate_otp(
+        &self,
+        digits: u32,
+        epoch: u64,
+        time_step: u64,
+    ) -> u64 {
+        totp_raw_now(&self.secret, digits, epoch, time_step, &HashType::SHA1)
     }
 }
