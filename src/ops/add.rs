@@ -12,7 +12,7 @@ use std::io::{
 /// Adds new secret into data source
 pub(crate) fn add(
     name: String,
-    secret: String,
+    secret: &str,
 ) -> Result<(), Error> {
     let c = Crypt::new(secret);
     print!("Please enter the secret: ");

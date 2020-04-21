@@ -11,14 +11,14 @@ use std::io::{
     Write,
 };
 
-pub(crate) struct Crypt {
-    key:      String,
+pub(crate) struct Crypt<'a> {
+    key:      &'a str,
     secrets:  Vec<String>,
     raw_data: Vec<String>,
 }
 
-impl Crypt {
-    pub(crate) fn new(key: String) -> Self {
+impl<'a> Crypt<'a> {
+    pub(crate) fn new(key: &'a str) -> Self {
         Self {
             key,
             secrets: Vec::new(),
@@ -31,8 +31,8 @@ impl Crypt {
         name: String,
     ) -> Result<(), Error> {
         // Key must be 16 chars
-        let mut mc: MagicCrypt = new_magic_crypt!(&self.key, 256);
-        let mut line = read_secret()?;
+        let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
+        let line = read_secret()?;
         let mut line = name + "|" + &line;
         line.pop();
 
@@ -66,7 +66,7 @@ impl Crypt {
                 .secrets
                 .iter()
                 .map(|data| {
-                    let mut mc: MagicCrypt = new_magic_crypt!(&self.key, 256);
+                    let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
                     mc.decrypt_base64_to_string(data)
                         .unwrap_or(String::from(""))
                 })
