@@ -6,7 +6,7 @@ use structopt::StructOpt;
 pub(crate) struct Opt {
     /// Listing existing OTP secrets.
     #[structopt(short, long)]
-    pub list: Option<bool>,
+    pub list: bool,
 
     /// Adding new OTP secret
     #[structopt(short, long)]
@@ -14,11 +14,8 @@ pub(crate) struct Opt {
 
     /// Remove existing OTP secret
     #[structopt(short, long)]
+    #[allow(unused)]
     pub delete: Option<String>,
-
-    /// Initialize the totp file with password.
-    #[structopt(short, long)]
-    pub init: Option<bool>,
 
     /// Specific key
     #[structopt(short, long)]

@@ -14,33 +14,31 @@
 
 //! some doc
 
-use crate::file::{
-    read_secret,
-    Crypt,
-};
-use crate::otp::OTP;
 #[macro_use]
 extern crate magic_crypt;
 
 mod cli_args;
 mod file;
+mod ops;
 mod otp;
 mod util;
 
+use crate::cli_args::Opt;
+use crate::ops::{
+    add::add,
+    get::get,
+    list::list,
+};
+
 fn main() {
-    let token =
-        "NRNM7KGFTR6SUMPBAEMBETM2WGKVUWHH6Y4VEGNPZON3GMVXBHFJV4PJZRFBUXWD";
+    let opt = Opt::get_cli_args();
+    let key = &opt.key;
 
-    let otp = OTP::new(token);
-    println!("{}", otp.generate_otp());
-
-    let mut c = Crypt::new();
-
-    // c.write_into_file();
-    match c.read() {
-        Ok(_) => println!("OK"),
-        Err(e) => println!("Err: {}", e.to_string()),
+    if let Some(name) = opt.get {
+        let _ = get(&name, key);
+    } else if opt.list {
+        let _ = list(key);
+    } else if let Some(name) = opt.add {
+        let _ = add(name, key);
     }
-
-    // read();
 }
