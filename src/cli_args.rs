@@ -19,6 +19,14 @@ pub(crate) struct Opt {
     /// Initialize the totp file with password.
     #[structopt(short, long)]
     pub init: Option<bool>,
+
+    /// Specific key
+    #[structopt(short, long)]
+    pub get: Option<String>,
+
+    /// Encryption key for the file that totp going to use as a data source.
+    #[structopt(long)]
+    pub key: String,
 }
 
 impl Opt {
