@@ -1,9 +1,8 @@
 use crate::file::Crypt;
-use crate::util::mapify;
 use std::collections::HashMap;
 use std::io::Error;
 
-pub(crate) fn list(key: String) -> Result<(), Error> {
+pub(crate) fn list(key: &str) -> Result<(), Error> {
     let mut c = Crypt::new(key);
     let _ = c.read()?;
 
