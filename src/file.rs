@@ -11,25 +11,29 @@ use std::io::{
     Write,
 };
 
-pub(crate) struct Crypt<'a> {
-    key:     &'a str,
-    secrets: Vec<String>,
+pub(crate) struct Crypt {
+    key:      String,
+    secrets:  Vec<String>,
     raw_data: Vec<String>,
 }
 
-impl<'a> Crypt<'a> {
-    pub(crate) fn new() -> Self {
+impl Crypt {
+    pub(crate) fn new(key: String) -> Self {
         Self {
-            key:     "secretkey",
+            key,
             secrets: Vec::new(),
             raw_data: Vec::new(),
         }
     }
 
-    pub(crate) fn write_into_file(&self) -> Result<(), Error> {
+    pub(crate) fn write_into_file(
+        &self,
+        name: String,
+    ) -> Result<(), Error> {
         // Key must be 16 chars
-        let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
+        let mut mc: MagicCrypt = new_magic_crypt!(&self.key, 256);
         let mut line = read_secret()?;
+        let mut line = name + "|" + &line;
         line.pop();
 
         if let Some(totp_file) = get_totp_file_path() {
@@ -62,7 +66,7 @@ impl<'a> Crypt<'a> {
                 .secrets
                 .iter()
                 .map(|data| {
-                    let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
+                    let mut mc: MagicCrypt = new_magic_crypt!(&self.key, 256);
                     mc.decrypt_base64_to_string(data)
                         .unwrap_or(String::from(""))
                 })
