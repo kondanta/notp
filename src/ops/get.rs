@@ -1,9 +1,16 @@
 use crate::file::Crypt;
-
 use crate::otp::OTP;
 use std::collections::HashMap;
 use std::io::Error;
 
+/// Generates OTP code with the demanded identifier.
+///
+/// # Example
+/// ```rust
+/// use crate::ops::get::get;
+/// get("GoogleAccount-1", "superSecretAesKey");
+/// // If GoogleAccount-1 exists, it will print something like (GoogleAccount-1, 123456)
+/// ```
 pub(crate) fn get(
     name: &str,
     key: &str,
@@ -16,6 +23,7 @@ pub(crate) fn get(
     Ok(())
 }
 
+/// Prints the otp code
 fn show(map: HashMap<String, String>) {
     if map.is_empty() {
         println!(
@@ -26,7 +34,7 @@ fn show(map: HashMap<String, String>) {
     }
     for e in map {
         let otp = OTP::new(&e.1);
-        println!("{}'s code: {}", e.0, otp.generate_otp())
+        println!("{}'s code: {}", e.0, otp.generate_otp(6, 0, 30))
     }
 }
 
@@ -47,6 +55,10 @@ fn mapify(
     map
 }
 
+/// Logic for searching the identifier.
+///
+/// This might be looking meaningless but there would be a chance for me to
+/// change the searching algorithm, so having separate function for that is ok.
 fn is_searched(
     value: &str,
     target: &str,

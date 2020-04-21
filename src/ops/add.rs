@@ -6,6 +6,9 @@ use std::io::{
 };
 
 /// Adds new secret into data source
+///
+/// This function takes an identifier which I call `name` and AES `key`.
+/// Then asks for the 2FA secret using stdin.
 pub(crate) fn add(
     name: String,
     key: &str,

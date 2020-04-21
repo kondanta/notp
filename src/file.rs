@@ -11,13 +11,23 @@ use std::io::{
     Write,
 };
 
+/// Data model for the file operations.
+///
+/// Our main operations are writing into file and reading it from there.
+/// While we doing this, we need a `key`, also we need to store the data that
+/// read from the file.
 pub(crate) struct Crypt<'a> {
+    /// AES key that is used for encryption and decryption.
     key:      &'a str,
+    /// Encrypted list of the secrets. Such as `AKSJFKxzkcjkasd==`
     secrets:  Vec<String>,
+    /// Decrypted list of the secrets with their identifiers. Such as
+    /// `Google|SomeSecretCode`
     raw_data: Vec<String>,
 }
 
 impl<'a> Crypt<'a> {
+    /// Returns to a new Crypt struct with empty secrets.
     pub(crate) fn new(key: &'a str) -> Self {
         Self {
             key,
@@ -26,13 +36,14 @@ impl<'a> Crypt<'a> {
         }
     }
 
+    /// Writes data into config file.
     pub(crate) fn write_into_file(
         &self,
         name: String,
     ) -> Result<(), Error> {
         // Key must be 16 chars
         let mut mc: MagicCrypt = new_magic_crypt!(self.key, 256);
-        let line = read_secret()?;
+        let line = read_from_stdin()?;
         let mut line = name + "|" + &line;
         line.pop();
 
@@ -51,6 +62,7 @@ impl<'a> Crypt<'a> {
         Ok(())
     }
 
+    /// Reads the content of the config file.
     pub(crate) fn read(&mut self) -> Result<(), Error> {
         if let Some(totp_file) = get_totp_file_path() {
             let file = OpenOptions::new().read(true).open(totp_file)?;
@@ -76,22 +88,29 @@ impl<'a> Crypt<'a> {
         Ok(())
     }
 
+    /// Returns to decrypted list of the secrets.
     pub(crate) fn get_raw_data(&self) -> &Vec<String> {
         &self.raw_data
     }
 
+    /// Returns to the encrypted list of the secrets.
     #[allow(unused)]
     pub(crate) fn get_encrypted_data(&self) -> &Vec<String> {
         &self.secrets
     }
 }
 
-pub(crate) fn read_secret() -> Result<String, Error> {
+/// Reads text from stdin
+pub(crate) fn read_from_stdin() -> Result<String, Error> {
     let mut line = String::new();
     io::stdin().read_line(&mut line)?;
     Ok(line)
 }
 
+/// Returns to the Path string of the TOTP config file.
+///
+/// We need to find the config file in order to perform write and read
+/// operations.
 fn get_totp_file_path() -> Option<String> {
     if let Some(totp_folder_path) = get_folder_path("totp") {
         let totp_file = format!("{}/{}", totp_folder_path, "totp");
