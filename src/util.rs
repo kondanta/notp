@@ -1,4 +1,3 @@
-use dirs;
 use std::fs;
 use std::path::{
     Path,
@@ -9,7 +8,7 @@ use std::path::{
 #[allow(unused)]
 pub fn is_path_exists(path: &str) -> bool {
     if let Some(p) = get_config_dir() {
-        let totp_path = format!("{}/{}", p.to_str().unwrap(), path);
+        let totp_path = format!("{}/{}", p.to_str().unwrap_or_default(), path);
         return Path::new(&totp_path).exists();
     }
     false
@@ -24,7 +23,8 @@ fn get_config_dir() -> Option<PathBuf> {
 pub fn create_folder(path: &str) {
     if !is_path_exists(path) {
         if let Some(p) = get_config_dir() {
-            let totp_path = format!("{}/{}", p.to_str().unwrap(), path);
+            let totp_path =
+                format!("{}/{}", p.to_str().unwrap_or_default(), path);
             let _ = fs::create_dir_all(&totp_path).is_ok();
         }
     }
@@ -37,7 +37,8 @@ pub fn create_folder(path: &str) {
 /// full path such as `/home/user/.config/totp`.
 pub fn get_folder_path(path: &str) -> Option<String> {
     if let Some(p) = get_config_dir() {
-        let folder_path = format!("{}/{}", p.to_str().unwrap(), path);
+        let folder_path =
+            format!("{}/{}", p.to_str().unwrap_or_default(), path);
         return Some(folder_path);
     }
     None
