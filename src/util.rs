@@ -80,4 +80,14 @@ mod tests {
         create_folder("totp");
         assert_eq!(true, is_path_exists("totp"));
     }
+
+    #[test]
+    fn vector_to_map() {
+        let v = vec![String::from("Key=Value")];
+        let map = mapify(v, "=");
+        for e in map {
+            assert_eq!("Key", e.0);
+            assert_eq!("Value", e.1);
+        }
+    }
 }
