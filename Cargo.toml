@@ -3,6 +3,8 @@ name = "totp"
 version = "1.1.0"
 authors = ["Taylan Dogan <doganntaylan@gmail.com>"]
 edition = "2018"
+description = "One Time Password Generator tool that is meant to be used on CLI."
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
