@@ -2,7 +2,7 @@
 topt is a CLI tool for generating one time passwords from CLI. Highly influenced by 2FA repository from rsc.
 
 ### Installation
-You can clone the repository and build it from the source or just download the binary that goes well with your OS
+You can clone the repository and build it from the source, download using `crate.io` or just download the binary that goes well with your OS
 from the latest release
 
 ### Usage
