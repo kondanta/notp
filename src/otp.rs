@@ -3,7 +3,7 @@ use oath::{
     HashType,
 };
 
-/// TOTP generator
+/// OTP generator
 pub(crate) struct OTP {
     secret: Vec<u8>,
 }

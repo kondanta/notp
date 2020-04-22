@@ -21,7 +21,7 @@ pub(crate) struct Opt {
     #[structopt(short, long)]
     pub get: Option<String>,
 
-    /// Encryption key for the file that totp going to use as a data source.
+    /// Encryption key for the file that notp going to use as a data source.
     #[structopt(long)]
     pub key: String,
 
