@@ -5,6 +5,8 @@ authors = ["Taylan Dogan <doganntaylan@gmail.com>"]
 edition = "2018"
 description = "One Time Password Generator tool that is meant to be used on CLI."
 license = "MIT"
+repository = "https://github.com/kondanta/notp"
+readme="README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
