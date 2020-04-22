@@ -47,11 +47,11 @@ impl<'a> Crypt<'a> {
         let mut line = name + "|" + &line;
         line.pop();
 
-        if let Some(totp_file) = get_totp_file_path() {
+        if let Some(notp_file) = get_notp_file_path() {
             let mut file = OpenOptions::new()
                 .create(true)
                 .append(true)
-                .open(totp_file)?;
+                .open(notp_file)?;
             let b64 = mc.encrypt_str_to_base64(line);
             file.write_all(b64.as_ref())
                 .expect("Cannot write into file");
@@ -64,8 +64,8 @@ impl<'a> Crypt<'a> {
 
     /// Reads the content of the config file.
     pub(crate) fn read(&mut self) -> Result<(), Error> {
-        if let Some(totp_file) = get_totp_file_path() {
-            let file = OpenOptions::new().read(true).open(totp_file)?;
+        if let Some(notp_file) = get_notp_file_path() {
+            let file = OpenOptions::new().read(true).open(notp_file)?;
             let mut s: String = String::new();
             let mut buf_reader = BufReader::new(file);
             buf_reader.read_to_string(&mut s)?;
@@ -107,14 +107,14 @@ pub(crate) fn read_from_stdin() -> Result<String, Error> {
     Ok(line)
 }
 
-/// Returns to the Path string of the TOTP config file.
+/// Returns to the Path string of the notp config file.
 ///
 /// We need to find the config file in order to perform write and read
 /// operations.
-fn get_totp_file_path() -> Option<String> {
-    if let Some(totp_folder_path) = get_folder_path("totp") {
-        let totp_file = format!("{}/{}", totp_folder_path, "totp");
-        return Some(totp_file);
+fn get_notp_file_path() -> Option<String> {
+    if let Some(notp_folder_path) = get_folder_path("notp") {
+        let notp_file = format!("{}/{}", notp_folder_path, "notp");
+        return Some(notp_file);
     }
     None
 }

@@ -423,6 +423,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72ef4a56884ca558e5ddb05a1d1e7e1bfd9a68d9ed024c21704cc98872dae1bb"
 
 [[package]]
+name = "notp"
+version = "1.1.0"
+dependencies = [
+ "base32",
+ "byteorder",
+ "dirs",
+ "magic-crypt",
+ "oath",
+ "ring",
+ "structopt",
+]
+
+[[package]]
 name = "oath"
 version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -713,19 +726,6 @@ checksum = "ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438"
 dependencies = [
  "libc",
  "winapi",
-]
-
-[[package]]
-name = "totp"
-version = "1.1.0"
-dependencies = [
- "base32",
- "byteorder",
- "dirs",
- "magic-crypt",
- "oath",
- "ring",
- "structopt",
 ]
 
 [[package]]
