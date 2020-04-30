@@ -38,13 +38,10 @@ fn show(
     }
     for e in map {
         let otp = OTP::new(&e.1);
-        match quiet {
-            true => print!("{}", otp.generate_otp(6, 0, 30)),
-            false => println!(
-                "OTP code for the {}: {}",
-                e.0,
-                otp.generate_otp(6, 0, 30)
-            ),
+        if quiet {
+            print!("{}", otp.generate_otp(6, 0, 30))
+        } else {
+            println!("OTP code for the {}: {}", e.0, otp.generate_otp(6, 0, 30))
         }
     }
 }
