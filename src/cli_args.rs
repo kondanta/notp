@@ -9,7 +9,7 @@ pub(crate) struct Opt {
     pub list: bool,
 
     /// Adding new OTP secret
-    #[structopt(short, long)]
+    #[structopt(short, long, requires("key"))]
     pub add: Option<String>,
 
     /// Remove existing OTP secret
@@ -17,12 +17,12 @@ pub(crate) struct Opt {
     pub delete: Option<String>,
 
     /// Specific key
-    #[structopt(short, long)]
+    #[structopt(short, long, requires("key"))]
     pub get: Option<String>,
 
     /// Encryption key for the file that notp going to use as a data source.
     #[structopt(long)]
-    pub key: String,
+    pub key: Option<String>,
 
     /// Suppresses the OTP output and just prints the code.
     #[structopt(short, long)]
