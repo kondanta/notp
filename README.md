@@ -8,10 +8,11 @@ from the latest release
 ### Usage
 ```bash
 notp --help
-notp --add <name> --key superSecretKey
+# Lets say I'd like to add a Google account.
+notp --add taylan-google --key superSecretKey
 # you have to provide secret code when stdin prompts.
-notp --key superSecretKey --list
-notp --key superSecretKey --get <name>
+notp --list
+notp --get <name> --key superSecretKey 
 ```
 OTP generation only supports 6 digit codes, for now.
 
@@ -25,7 +26,7 @@ so it is important that the system clock have at least one-minute accuracy.
 
 Adding new secret:
 ```bash
-$ notp --key ttaayyllaann --add AWS
+$ notp --add AWS --key ttaayyllaann 
 Please enter the secret: NRNM7KGFTR6SUMPBAEMBETM2WGKVUWHH6Y4VEGNPZON3GMVXBHF...
 $
 # There won't be any confirmation messages that indicates successfull insertion
@@ -34,7 +35,7 @@ $
 
 Checking existing secrets you have:
 ```bash
-$ notp --key ttaayyllaann --list
+$ notp --list
 1. AWS
 2. Google
 $
@@ -42,20 +43,15 @@ $
 
 Generating the OTP code:
 ```bash
-$ notp --key ttaayyllaann --get AWS
+$ notp --get AWS --key ttaayyllaann
 OTP code for the AWS: 442659
 $ 
 ```
 
 Deleting a secret:
-> Since notp does not support deleting a key, you can manually remove the secret from file. Each key has splitted with a
-> comma and the order is the same as the output you see when you use --list command.
 ```bash
-# Example for the macOS
-$ cat ~/Library/Preferences/notp/notp
-asldkasld==,lbvkjcksdf==
-$ vim ~/Library/Preferences/notp/notp
-# delete the one that starts lb and and ==. That means you have deleted the 2. key that is listed when --list used.
+$ notp --delete AWS
+AWS Deleted!
 ```
 
 Using with CLI:
