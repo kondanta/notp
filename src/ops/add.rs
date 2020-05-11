@@ -31,7 +31,7 @@ pub(crate) fn add(
 
 fn encrypt_value(enc_key: &str) -> String {
     let mut mc: MagicCrypt = new_magic_crypt!(enc_key, 256);
-    let mut value = read_from_stdin().unwrap_or("".to_string());
+    let mut value = read_from_stdin().unwrap_or_else(|_| "".to_string());
     value.pop();
     mc.encrypt_str_to_base64(value)
 }
