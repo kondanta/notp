@@ -1,4 +1,6 @@
 use std::fs;
+use std::io;
+use std::io::Error;
 use std::path::{
     Path,
     PathBuf,
@@ -43,6 +45,13 @@ pub fn get_folder_path(path: &str) -> Option<String> {
         return Some(folder_path);
     }
     None
+}
+
+/// Reads text from stdin
+pub(crate) fn read_from_stdin() -> Result<String, Error> {
+    let mut line = String::new();
+    io::stdin().read_line(&mut line)?;
+    Ok(line)
 }
 
 #[cfg(test)]
