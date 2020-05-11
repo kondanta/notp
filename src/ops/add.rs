@@ -25,13 +25,13 @@ pub(crate) fn add(
 
     match store.insert(String::from(name), b64) {
         Ok(_) => Ok(()),
-        Err(_) => panic!("Cannot insert secret!"),
+        _ => panic!("Cannot insert secret!"),
     }
 }
 
 fn encrypt_value(enc_key: &str) -> String {
     let mut mc: MagicCrypt = new_magic_crypt!(enc_key, 256);
-    let mut value = read_from_stdin().unwrap_or(String::new());
+    let mut value = read_from_stdin().unwrap_or("".to_string());
     value.pop();
     mc.encrypt_str_to_base64(value)
 }

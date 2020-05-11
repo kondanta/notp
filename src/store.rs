@@ -43,7 +43,7 @@ impl SecretStore {
         &self,
         secret_name: String,
     ) -> Result<String, Error> {
-        match self.bucket.get(String::from(secret_name)) {
+        match self.bucket.get(secret_name) {
             Ok(result) => {
                 if let Some(r) = result {
                     return Ok(r);
@@ -56,7 +56,7 @@ impl SecretStore {
 
     /// Lists available secrets.
     pub(crate) fn list_secrets(&self) -> Result<(), Error> {
-        if self.bucket.len() < 1 {
+        if self.bucket.is_empty() {
             println!("You don't have any secrets.");
             return Ok(());
         }
