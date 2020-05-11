@@ -41,11 +41,11 @@ fn main() {
     let key = opt.key;
 
     if let Some(name) = opt.get {
-        let _ = get(&name, &key.unwrap_or("".to_owned()), opt.quiet);
+        let _ = get(&name, &key.unwrap_or_else(|| "".to_owned()), opt.quiet);
     } else if opt.list {
         let _ = list();
     } else if let Some(name) = opt.add {
-        let _ = add(&name, &key.unwrap_or("".to_owned()));
+        let _ = add(&name, &key.unwrap_or_else(|| "".to_owned()));
     } else if let Some(name) = opt.delete {
         let _ = delete(&name);
     }
