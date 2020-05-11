@@ -14,7 +14,6 @@ pub(crate) struct Opt {
 
     /// Remove existing OTP secret
     #[structopt(short, long)]
-    #[allow(unused)]
     pub delete: Option<String>,
 
     /// Specific key

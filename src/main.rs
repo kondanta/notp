@@ -23,14 +23,15 @@
 extern crate magic_crypt;
 
 mod cli_args;
-mod file;
 mod ops;
 mod otp;
+mod store;
 mod util;
 
 use crate::cli_args::Opt;
 use crate::ops::{
     add::add,
+    delete::delete,
     get::get,
     list::list,
 };
@@ -42,8 +43,10 @@ fn main() {
     if let Some(name) = opt.get {
         let _ = get(&name, key, opt.quiet);
     } else if opt.list {
-        let _ = list(key);
+        let _ = list();
     } else if let Some(name) = opt.add {
-        let _ = add(name, key);
+        let _ = add(&name, key);
+    } else if let Some(name) = opt.delete {
+        let _ = delete(&name);
     }
 }
