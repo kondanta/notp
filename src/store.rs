@@ -1,9 +1,11 @@
+use crate::error::{
+    NotpError,
+    NotpResult,
+};
 use crate::util::get_folder_path;
-
 use kv::{
     Bucket,
     Config,
-    Error,
     Store,
 };
 
@@ -20,19 +22,17 @@ impl SecretStore {
     /// use store::SecretStore;
     /// let store = SecretStore::new()?;
     /// ```
-    pub(crate) fn new() -> Result<Self, Error> {
-        let path = match get_folder_path("notp") {
-            Some(p) => p,
-            None => {
-                eprintln!("Cannot find the notp path!");
-                std::process::exit(2);
-            }
+    pub(crate) fn new() -> NotpResult<Self> {
+        if let Some(path) = get_folder_path("notp") {
+            // TODO: Move these in `init` function.
+            let cfg = Config::new(path);
+            let store = Store::new(cfg)?;
+            let bucket = store.bucket::<String, String>(Some("store"))?;
+            return Ok(Self { bucket });
         };
-        // TODO: Move these in `init` function.
-        let cfg = Config::new(path);
-        let store = Store::new(cfg)?;
-        let bucket = store.bucket::<String, String>(Some("store"))?;
-        Ok(Self { bucket })
+        Err(NotpError::Generic(String::from(
+            "Cannot find the notp folder!",
+        )))
     }
 
     /// Inserts new secret into storage
@@ -47,8 +47,10 @@ impl SecretStore {
         &self,
         secret_name: String,
         secret_value: String,
-    ) -> Result<(), Error> {
-        self.bucket.set(secret_name, secret_value)
+    ) -> NotpResult<()> {
+        self.bucket
+            .set(secret_name, secret_value)
+            .map_err(Into::into)
     }
 
     /// Finds searched secret using its name.
@@ -62,15 +64,15 @@ impl SecretStore {
     pub(crate) fn get(
         &self,
         secret_name: String,
-    ) -> Result<String, Error> {
+    ) -> NotpResult<String> {
         match self.bucket.get(secret_name) {
             Ok(result) => {
                 if let Some(r) = result {
                     return Ok(r);
                 }
-                Err(Error::InvalidConfiguration)
+                Err(NotpError::Kv(kv::Error::InvalidConfiguration))
             }
-            Err(e) => Err(e),
+            Err(e) => Err(NotpError::Kv(e)),
         }
     }
 
@@ -82,7 +84,7 @@ impl SecretStore {
     /// // get store instance using new() function.
     /// store.list_secrets()
     /// ```
-    pub(crate) fn list_secrets(&self) -> Result<(), Error> {
+    pub(crate) fn list_secrets(&self) -> NotpResult<()> {
         if self.bucket.is_empty() {
             println!("You don't have any secrets.");
             return Ok(());
@@ -109,7 +111,7 @@ impl SecretStore {
     pub(crate) fn delete(
         &self,
         secret_name: String,
-    ) -> Result<(), Error> {
-        self.bucket.remove(secret_name)
+    ) -> NotpResult<()> {
+        self.bucket.remove(secret_name).map_err(Into::into)
     }
 }

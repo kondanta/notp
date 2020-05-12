@@ -23,6 +23,7 @@
 extern crate magic_crypt;
 
 mod cli_args;
+mod error;
 mod ops;
 mod otp;
 mod store;

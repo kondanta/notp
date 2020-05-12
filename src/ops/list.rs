@@ -1,5 +1,5 @@
+use crate::error::NotpResult;
 use crate::store::SecretStore;
-use kv::Error;
 
 /// Lists all existing identifiers.
 ///
@@ -9,7 +9,7 @@ use kv::Error;
 /// 2. Slack
 /// 3. Jira
 /// ```
-pub(crate) fn list() -> Result<(), Error> {
+pub(crate) fn list() -> NotpResult<()> {
     let store = SecretStore::new().expect("Cannot get the store instance!");
 
     store.list_secrets()

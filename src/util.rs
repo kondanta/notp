@@ -1,7 +1,7 @@
+use crate::error::NotpResult;
 use rpassword::read_password_from_tty;
 use std::fs;
 use std::io;
-use std::io::Error;
 use std::path::{
     Path,
     PathBuf,
@@ -49,7 +49,7 @@ pub fn get_folder_path(path: &str) -> Option<String> {
 }
 
 /// Reads text from stdin
-pub(crate) fn read_from_stdin() -> Result<String, Error> {
+pub(crate) fn read_from_stdin() -> NotpResult<String> {
     let mut line = String::new();
     io::stdin().read_line(&mut line)?;
     Ok(line)
@@ -59,8 +59,8 @@ pub(crate) fn read_from_stdin() -> Result<String, Error> {
 ///
 /// In bash, we have read -s functionality that does not print the
 /// characters that typed by the user. This function also does the same.
-pub(crate) fn read_from_stdin_securely() -> Result<String, Error> {
-    read_password_from_tty(Some("Key: "))
+pub(crate) fn read_from_stdin_securely() -> NotpResult<String> {
+    read_password_from_tty(Some("Key: ")).map_err(Into::into)
 }
 
 #[cfg(test)]

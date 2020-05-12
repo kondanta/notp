@@ -1,9 +1,9 @@
+use crate::error::NotpResult;
 use crate::store::SecretStore;
 use crate::util::read_from_stdin;
 use magic_crypt::MagicCrypt;
 use std::io::{
     stdout,
-    Error,
     Write,
 };
 
@@ -14,7 +14,7 @@ use std::io::{
 pub(crate) fn add(
     name: &str,
     key: &str,
-) -> Result<(), Error> {
+) -> NotpResult<()> {
     let store = SecretStore::new().expect("Cannot get the store instance!");
     print!("Please enter the secret: ");
 

@@ -1,8 +1,7 @@
+use crate::error::NotpResult;
 use crate::otp::OTP;
 use crate::store::SecretStore;
 use magic_crypt::MagicCrypt;
-use std::io::Error;
-
 // store.insert(&name).ok();
 // store.get(&name);
 // store.list_secrets().ok();
@@ -19,7 +18,7 @@ pub(crate) fn get(
     name: &str,
     key: &str,
     quiet: bool,
-) -> Result<(), Error> {
+) -> NotpResult<()> {
     let mut mc: MagicCrypt = new_magic_crypt!(key, 256);
 
     let store = SecretStore::new().expect("Cannot get the store instance!");
