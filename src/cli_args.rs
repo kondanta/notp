@@ -9,24 +9,41 @@ pub(crate) struct Opt {
     pub list: bool,
 
     /// Adding new OTP secret
-    #[structopt(short, long, requires("key"))]
+    #[structopt(short, long)]
     pub add: Option<String>,
 
     /// Remove existing OTP secret
     #[structopt(short, long)]
     pub delete: Option<String>,
 
-    /// Specific key
-    #[structopt(short, long, requires("key"))]
+    /// Get OTP code for the selected secret.
+    #[structopt(short, long)]
     pub get: Option<String>,
 
     /// Encryption key for the file that notp going to use as a data source.
-    #[structopt(long)]
+    #[structopt(
+        long,
+        required_unless = "list",
+        required_unless = "delete",
+        conflicts_with = "stdin"
+    )]
     pub key: Option<String>,
 
     /// Suppresses the OTP output and just prints the code.
     #[structopt(short, long)]
     pub quiet: bool,
+
+    /// Reads key securely from stdin.
+    ///
+    /// `stdin` option does not print characters on the screen. It works like
+    /// bash's read -s functionality.
+    #[structopt(
+        long,
+        required_unless = "list",
+        required_unless = "delete",
+        conflicts_with = "key"
+    )]
+    pub stdin: bool,
 }
 
 impl Opt {

@@ -35,10 +35,18 @@ use crate::ops::{
     get::get,
     list::list,
 };
+use crate::util::read_from_stdin_securely;
 
 fn main() {
     let opt = Opt::get_cli_args();
-    let key = opt.key;
+    let key;
+
+    if opt.stdin {
+        key =
+            Some(read_from_stdin_securely().unwrap_or_else(|_| "".to_owned()));
+    } else {
+        key = opt.key;
+    }
 
     if let Some(name) = opt.get {
         let _ = get(&name, &key.unwrap_or_else(|| "".to_owned()), opt.quiet);
