@@ -2,7 +2,10 @@ use structopt::StructOpt;
 
 /// List of the command line arguments
 #[derive(StructOpt, Debug, Clone)]
-#[structopt(name = "basic")]
+#[structopt(
+    name = "NOTP",
+    about = "CLI Utility that generates One Time Passwords for given services."
+)]
 pub(crate) struct Opt {
     /// Listing existing OTP secrets.
     #[structopt(short, long)]
