@@ -7,12 +7,21 @@ from the latest release
 
 ### Usage
 ```bash
-notp --help
-# Lets say I'd like to add a Google account.
-notp --add taylan-google --key superSecretKey
+# Let's see what we have here.
+$ notp --help
+# notp supports --key and --stdin exclusively. If you want to keep your secret secret,
+# I urge you to use --stdin flag. --key is also usefull when you want to combine notp with
+# shell tools and don't want to pass your secret using echo and such. Also, for the sake of 
+# simplictiy I'll keep using --key flag throughout this documentation.
+# Alrigh, lets say I'd like to add a Google account.
+$ notp --add taylan-google --key superSecretKey
 # you have to provide secret code when stdin prompts.
-notp --list
-notp --get <name> --key superSecretKey 
+# OR
+$ notp --add taylan-google --stdin
+# Key: <you will type your encryption key here>
+# Enter secret prompt: <You will paste your OTP secret here>
+$ notp --list
+$ notp --get <name> --key superSecretKey 
 ```
 OTP generation only supports 6 digit codes, for now.
 
