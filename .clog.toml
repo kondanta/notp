@@ -1,0 +1,27 @@
+[clog]
+repository      = "https://github.com/kondanta/notp"
+changelog       = "CHANGELOG.md"
+output-format   = "markdown"
+from-latest-tag = true
+
+[sections]
+# Changes that affect the build system or external dependencies (example scopes: go-mod)
+Build       = ["build"]
+# Changes to our CI configuration files and scripts (example scopes: Travis)
+CICD        = ["ci"]
+# Documentation only changes (example scopes: Readme, Changelog, Template)
+Documents   = ["doc", "docs"]
+# A new feature
+Feature     = ["feat", "feature"]
+# A bug fix
+Fix         = ["fix", "bug"]
+#  A code change that improves performance
+Performance = ["perf", "opt", "optimization"]
+#  A code change that neither fixes a bug nor adds a feature
+Refactor    = ["refactor"]
+# Roll backs
+Revert      = ["revert"]
+# Adds missing tests or correcting existing tests
+Test        = ["test"]
+# Styling and formatting
+Style       = ["style"]
