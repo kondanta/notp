@@ -61,11 +61,12 @@ impl SecretStore {
             return Ok(());
         }
 
+        let mut ctr = 1;
         for item in self.bucket.iter() {
             let item = item?;
             let key: String = item.key()?;
-            let value = item.value::<String>()?;
-            println!("Key: {}, Value: {}", key, value);
+            println!("{}. {}", ctr, key);
+            ctr += 1;
         }
         Ok(())
     }
