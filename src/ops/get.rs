@@ -43,6 +43,7 @@ pub(crate) fn get(
     Ok(())
 }
 
+// utility function for printing the OTP code.
 fn print_otp(
     token: &str,
     name: &str,

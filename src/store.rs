@@ -14,6 +14,12 @@ pub(crate) struct SecretStore {
 
 impl SecretStore {
     /// Creates new SecretStore instance.
+    ///
+    /// # Example
+    /// ```rust
+    /// use store::SecretStore;
+    /// let store = SecretStore::new()?;
+    /// ```
     pub(crate) fn new() -> Result<Self, Error> {
         let path = match get_folder_path("notp") {
             Some(p) => p,
@@ -30,6 +36,13 @@ impl SecretStore {
     }
 
     /// Inserts new secret into storage
+    ///
+    /// # Example
+    /// ```rust
+    /// use store::SecretStore;
+    /// // get store instance using new() function.
+    /// store.insert(String::from("Key"), String::from("Value"))
+    /// ```
     pub(crate) fn insert(
         &self,
         secret_name: String,
@@ -39,6 +52,13 @@ impl SecretStore {
     }
 
     /// Finds searched secret using its name.
+    ///
+    /// # Example
+    /// ```rust
+    /// use store::SecretStore;
+    /// // get store instance using new() function.
+    /// store.get(String::from("Key"))
+    /// ```
     pub(crate) fn get(
         &self,
         secret_name: String,
@@ -55,6 +75,13 @@ impl SecretStore {
     }
 
     /// Lists available secrets.
+    ///
+    /// # Example
+    /// ```rust
+    /// use store::SecretStore;
+    /// // get store instance using new() function.
+    /// store.list_secrets()
+    /// ```
     pub(crate) fn list_secrets(&self) -> Result<(), Error> {
         if self.bucket.is_empty() {
             println!("You don't have any secrets.");
@@ -72,6 +99,13 @@ impl SecretStore {
     }
 
     /// Deletes selected secret from storage.
+    ///
+    /// # Example
+    /// ```rust
+    /// use store::SecretStore;
+    /// // get store instance using new() function.
+    /// store.delete(String::from("Key"))
+    /// ```
     pub(crate) fn delete(
         &self,
         secret_name: String,
