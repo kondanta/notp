@@ -1,3 +1,44 @@
+<a name="2.0.0"></a>
+## 2.0.0 You Can (Not) Advance (2020-05-12)
+
+
+#### Bug Fixes
+
+*   use unwrap_or_else ([d8294366](https://github.com/kondanta/notp/commit/d829436627ab4c67d803687e2a6fe851c0ace9f5))
+* **cli:**  make key param required only add and get ([703b50d7](https://github.com/kondanta/notp/commit/703b50d7ef97b4c954285074885bb2d095798f2f))
+* **ops:**  use unwrap_or_else instead of unwrap_or ([daf4d21d](https://github.com/kondanta/notp/commit/daf4d21d85f9e2650a671cea56c5e7fd4fb473ee))
+
+#### Breaking Changes
+
+* **store:**  implement KV store ([1c60262e](https://github.com/kondanta/notp/commit/1c60262e873ce56f5fbb2fc93d36ea52722cb02f), breaks [#](https://github.com/kondanta/notp/issues/))
+
+#### Feature
+
+* **cli:**  read Key from stdin securely ([21b9cdb2](https://github.com/kondanta/notp/commit/21b9cdb22d24666fed3b277c4c8cead2fac26dbe))
+* **error:**  add notp type for errors and result ([5f0924ec](https://github.com/kondanta/notp/commit/5f0924ec5782288fd06655d1875cd8c171e7038f))
+* **ops:**  add delete operation ([60327585](https://github.com/kondanta/notp/commit/603275856f717f3c5b30ea09f126255a24015096))
+* **store:**  implement KV store ([1c60262e](https://github.com/kondanta/notp/commit/1c60262e873ce56f5fbb2fc93d36ea52722cb02f), breaks [#](https://github.com/kondanta/notp/issues/))
+
+#### Refactor
+
+* **ops:**  change match with if-else ([90a3691f](https://github.com/kondanta/notp/commit/90a3691f997ab38119821d88ac2962e978c513b4))
+* **util:**  put stdin reader function into utils ([45de5fb8](https://github.com/kondanta/notp/commit/45de5fb8f30dbf9442bc055f085f250a71b6c14d))
+
+#### Style
+
+*   rustic way to implement if else ([e6f59866](https://github.com/kondanta/notp/commit/e6f5986688c1b22aa37f528809155bd15212697d))
+* **store:**  fix --list output ([aefdf43b](https://github.com/kondanta/notp/commit/aefdf43b07601d9e87fa490b94c8062c8d57cdba))
+
+#### Documents
+
+*   add CHANGELOG and changelog generator config ([a0984d7f](https://github.com/kondanta/notp/commit/a0984d7f4dacf2f27914cb4e59c86e979f63c8d2))
+*   update readme ([66109bee](https://github.com/kondanta/notp/commit/66109beee87ffa0d2e0677981f68821461010a76))
+* **cli:**  add description for cli arg parser ([51e5fe59](https://github.com/kondanta/notp/commit/51e5fe599e9e5d6298fc7c03a55874a11d9c28b0))
+* **readme:**  update readme ([5af591e2](https://github.com/kondanta/notp/commit/5af591e28ea4afd42b8496b104ffa19da3659de7))
+* **store:**  add more comments on store functions ([e0df818e](https://github.com/kondanta/notp/commit/e0df818eaed4e54325a5a982a7488ae65e1bd2ba))
+
+
+
 <a name="1.1.2"></a>
 ## 1.1.2 Transcending into the CLI (2020-05-12)
 
