@@ -1,0 +1,43 @@
+name: Continuous Deployment
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set the release version
+        run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF:11}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          toolchain: stable
+          args: --release --locked --all-features
+      - name: "Publish on crates.io"
+        uses: actions-rs/cargo@v1
+        with:
+          command: publish
+          args: --token ${{ secrets.CARGO_TOKEN }}
+      - name: Publish on GitHub
+        run: |
+          cd target/release
+          strip -s notp
+          tar czvf notp-${{ env.RELEASE_VERSION }}.tar.gz notp ../../LICENSE ../../README.md ../../man/notp.8
+          shasum -a 256 notp-${{ env.RELEASE_VERSION }}.tar.gz > notp-${{ env.RELEASE_VERSION }}.sha256
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/release/kmon-${{ env.RELEASE_VERSION }}.tar.gz
+            target/release/kmon-${{ env.RELEASE_VERSION }}.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
