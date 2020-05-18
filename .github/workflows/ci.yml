@@ -29,8 +29,9 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           override: true
+          components: rustfmt
       - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
         with:
