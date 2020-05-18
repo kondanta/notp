@@ -24,7 +24,6 @@ impl SecretStore {
     /// ```
     pub(crate) fn new() -> NotpResult<Self> {
         if let Some(path) = get_folder_path("notp") {
-            // TODO: Move these in `init` function.
             let cfg = Config::new(path);
             let store = Store::new(cfg)?;
             let bucket = store.bucket::<String, String>(Some("store"))?;
