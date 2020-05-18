@@ -1,4 +1,6 @@
 # notp
+![Continuous Integration](https://github.com/kondanta/notp/workflows/Continuous%20Integration/badge.svg?branch=master&event=push)
+
 notp is a CLI tool for generating one time passwords from CLI. Highly influenced by 2FA repository from rsc.
 
 ### Installation
