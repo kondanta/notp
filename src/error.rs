@@ -1,5 +1,5 @@
 use kv::Error as KVError;
-use magic_crypt::Error as MagicError;
+use magic_crypt::MagicCryptError as MagicError;
 use std::error::Error as StdError;
 use std::fmt::{
     Display,

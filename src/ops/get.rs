@@ -1,10 +1,7 @@
 use crate::error::NotpResult;
 use crate::otp::OTP;
 use crate::store::SecretStore;
-use magic_crypt::MagicCrypt;
-// store.insert(&name).ok();
-// store.get(&name);
-// store.list_secrets().ok();
+use magic_crypt::MagicCryptTrait;
 
 /// Generates OTP code with the demanded identifier.
 ///
@@ -19,7 +16,7 @@ pub(crate) fn get(
     key: &str,
     quiet: bool,
 ) -> NotpResult<()> {
-    let mut mc: MagicCrypt = new_magic_crypt!(key, 256);
+    let mc = new_magic_crypt!(key, 256);
 
     let store = SecretStore::new().expect("Cannot get the store instance!");
 
