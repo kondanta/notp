@@ -1,6 +1,6 @@
 [package]
 name = "notp"
-version = "2.0.0"
+version = "2.1.0"
 authors = ["Taylan Dogan <doganntaylan@gmail.com>"]
 edition = "2018"
 description = "One Time Password Generator tool that is meant to be used on CLI."
