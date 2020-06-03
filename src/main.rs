@@ -28,8 +28,6 @@ mod otp;
 mod store;
 mod util;
 
-use crate::cli_args::Opt;
-use crate::ops::{
 use cli_args::Opt;
 use util::read_from_stdin_securely;
 // No more mod.rs thingy. Yay!
@@ -42,6 +40,7 @@ use operations::{
 };
 use store::DataStore;
 
+#[cfg(feature = "kv-store")]
 use store::kv_store::SecretStore;
 
 fn main() {
@@ -54,6 +53,8 @@ fn main() {
     }
     .unwrap_or_else(|| "".to_owned());
 
+    // Global store variable
+    #[cfg(feature = "kv-store")]
     let store: SecretStore =
         DataStore::new().expect("Cannot create datastore object");
 
