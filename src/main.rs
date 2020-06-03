@@ -1,6 +1,5 @@
 #![deny(
-    clippy::option_unwrap_used,
-    clippy::result_unwrap_used,
+    clippy::unwrap_used,
     clippy::unnecessary_unwrap,
     clippy::get_last_with_len,
     missing_docs,
