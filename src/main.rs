@@ -23,35 +23,54 @@ extern crate magic_crypt;
 
 mod cli_args;
 mod error;
-mod ops;
+mod operations;
 mod otp;
 mod store;
 mod util;
 
 use crate::cli_args::Opt;
 use crate::ops::{
+use cli_args::Opt;
+use util::read_from_stdin_securely;
+// No more mod.rs thingy. Yay!
+use operations::{
     add::add,
     delete::delete,
     get::get,
     list::list,
+    Request,
 };
-use crate::util::read_from_stdin_securely;
+use store::DataStore;
+
+use store::kv_store::SecretStore;
 
 fn main() {
     let opt = Opt::get_cli_args();
+    // --stdin || --key
     let key = if opt.stdin {
         Some(read_from_stdin_securely().unwrap_or_else(|_| "".to_owned()))
     } else {
         opt.key
-    };
+    }
+    .unwrap_or_else(|| "".to_owned());
 
+    let store: SecretStore =
+        DataStore::new().expect("Cannot create datastore object");
+
+    // Parse command line args
     if let Some(name) = opt.get {
-        let _ = get(&name, &key.unwrap_or_else(|| "".to_owned()), opt.quiet);
+        let mc = new_magic_crypt!(&key, 256);
+        let req = Request::new(Some(&name), store, Some(mc));
+        let _ = get(req, opt.quiet);
     } else if opt.list {
-        let _ = list();
+        let req = Request::new(None, store, None);
+        let _ = list(req);
     } else if let Some(name) = opt.add {
-        let _ = add(&name, &key.unwrap_or_else(|| "".to_owned()));
+        let mc = new_magic_crypt!(&key, 256);
+        let req = Request::new(Some(&name), store, Some(mc));
+        let _ = add(req);
     } else if let Some(name) = opt.delete {
-        let _ = delete(&name);
+        let req = Request::new(Some(&name), store, None);
+        let _ = delete(req);
     }
 }
