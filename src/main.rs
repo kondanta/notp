@@ -29,49 +29,40 @@ mod store;
 mod util;
 
 use cli_args::Opt;
-use util::read_from_stdin_securely;
-// No more mod.rs thingy. Yay!
-use operations::{
-    add::add,
-    delete::delete,
-    get::get,
-    list::list,
-    Request,
-};
+use operations::Dispatcher;
 use store::DataStore;
+use util::read_from_stdin_securely;
 
 #[cfg(feature = "kv-store")]
 use store::kv_store::SecretStore;
 
 fn main() {
     let opt = Opt::get_cli_args();
-    // --stdin || --key
-    let key = if opt.stdin {
-        Some(read_from_stdin_securely().unwrap_or_else(|_| "".to_owned()))
-    } else {
-        opt.key
-    }
-    .unwrap_or_else(|| "".to_owned());
-
+    let map = opt.export_functions();
     // Global store variable
     #[cfg(feature = "kv-store")]
     let store: SecretStore =
         DataStore::new().expect("Cannot create datastore object");
 
-    // Parse command line args
-    if let Some(name) = opt.get {
-        let mc = new_magic_crypt!(&key, 256);
-        let req = Request::new(Some(&name), store, Some(mc));
-        let _ = get(req, opt.quiet);
-    } else if opt.list {
-        let req = Request::new(None, store, None);
-        let _ = list(req);
-    } else if let Some(name) = opt.add {
-        let mc = new_magic_crypt!(&key, 256);
-        let req = Request::new(Some(&name), store, Some(mc));
-        let _ = add(req);
-    } else if let Some(name) = opt.delete {
-        let req = Request::new(Some(&name), store, None);
-        let _ = delete(req);
+    // --stdin || --key
+    let key = if opt.stdin {
+        Some(read_from_stdin_securely().unwrap_or_else(|_| "".to_owned()))
+    } else {
+        opt.key.clone()
+    }
+    .unwrap_or_else(|| "".to_owned());
+
+    let mc = new_magic_crypt!(&key, 256);
+    // Dispatch correct function
+    for (operation_type, is_invoked) in map {
+        if is_invoked {
+            let d = Dispatcher::new(
+                store.clone(),
+                mc.clone(),
+                operation_type,
+                opt.quiet,
+            );
+            d.dispatcher();
+        }
     }
 }
