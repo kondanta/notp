@@ -11,6 +11,7 @@ use kv::{
     Store,
 };
 
+#[derive(Clone)]
 pub(crate) struct SecretStore {
     bucket: Bucket<'static, String, String>,
 }
