@@ -3,6 +3,11 @@ use oath::{
     HashType,
 };
 
+use bytevec::{
+    ByteDecodable,
+    ByteEncodable,
+};
+
 /// OTP generator
 pub(crate) struct OTP {
     secret: Vec<u8>,
@@ -11,13 +16,14 @@ pub(crate) struct OTP {
 impl OTP {
     /// Creates new OTP struct with a token.
     pub(crate) fn new(token: &str) -> Self {
-        Self {
-            secret: base32::decode(
-                base32::Alphabet::RFC4648 { padding: false },
-                token,
-            )
-            .expect("Cannot decode the secret!"),
-        }
+        let dc =
+            base32::decode(base32::Alphabet::RFC4648 { padding: false }, token)
+                .unwrap_or_else(|| {
+                    let slice = token.as_bytes();
+                    let bytes = slice.encode::<u32>().unwrap_or_default();
+                    <Vec<u8>>::decode::<u32>(&bytes).unwrap_or_default()
+                });
+        Self { secret: dc }
     }
 
     /// Generates 6 digit one time password.
