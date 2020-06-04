@@ -2,11 +2,22 @@
 ## v2.1.0 Generics (2020-06-04)
 
 
+#### Documents
+
+*   add ci status in readme ([adeb006f](https://github.com/kondanta/notp/commit/adeb006ff8faea08b5da6361def3855bc4088c7d))
+* **changelog:**  update changelog.md ([6ae9cca7](https://github.com/kondanta/notp/commit/6ae9cca7620fa587b5e573894ced2c8550d26a31))
+
 #### Refactor
 
 *   adapt main.rs to operational changes ([3703c2ef](https://github.com/kondanta/notp/commit/3703c2ef24c960261fc9cd4632def51eb8df97ed))
 *   remove TODO ([ecd22f62](https://github.com/kondanta/notp/commit/ecd22f629e97ca46343368ee733b999abe9149b2))
 * **operations:**  database interactions ([51b25d94](https://github.com/kondanta/notp/commit/51b25d94a53c18a797f939675f9724b088e37c30))
+
+#### Fix
+
+*   force default feature to depend kv-store ([3306395e](https://github.com/kondanta/notp/commit/3306395e863b0c89b7fa172d8bdd2dbc04b78d5a))
+* **cargo:**  fix clappy's depreciated lint values ([b80cfded](https://github.com/kondanta/notp/commit/b80cfded096dc612e0732b4bb2a220f5df260bd0))
+* **encryp:**  fix broken modules after major update ([fdfcf2ac](https://github.com/kondanta/notp/commit/fdfcf2ac6cd1b4ab8bc1ad925e7c0ede6883949c))
 
 #### Features
 
@@ -16,20 +27,11 @@
   *  implement kv storage for datastorage ([9a53fd60](https://github.com/kondanta/notp/commit/9a53fd605fdbbc7438b2b591121474dab0063bfc))
   *  add store trait ([66b9baa1](https://github.com/kondanta/notp/commit/66b9baa1d27f5ec1df0814b58edb0b9dc9a3e0db))
 
-#### Documents
-
-*   add ci status in readme ([adeb006f](https://github.com/kondanta/notp/commit/adeb006ff8faea08b5da6361def3855bc4088c7d))
-
 #### CICD
 
 *   use fmt with nightly ([f8860e6c](https://github.com/kondanta/notp/commit/f8860e6cd0aed519db10f8c5c43dbc5a7cf57279))
 *   add cd yaml file for github actions ([aeabfc47](https://github.com/kondanta/notp/commit/aeabfc470496ac65f2fec5936e769043daa0c45a))
 *   create ci yml for github actions ([4133d25c](https://github.com/kondanta/notp/commit/4133d25ccbf77695929c7ecd509bb88192aa3ff8))
-
-#### Bug Fixes
-
-* **cargo:**  fix clappy's depreciated lint values ([b80cfded](https://github.com/kondanta/notp/commit/b80cfded096dc612e0732b4bb2a220f5df260bd0))
-* **encryp:**  fix broken modules after major update ([fdfcf2ac](https://github.com/kondanta/notp/commit/fdfcf2ac6cd1b4ab8bc1ad925e7c0ede6883949c))
 
 
 
