@@ -15,7 +15,7 @@ documentation = "https://docs.rs/notp"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = ["kv"]
+default = ["kv-store"]
 
 # File based database
 kv-store = ["kv"]
