@@ -1,5 +1,8 @@
 use super::Request;
-use crate::error::NotpResult;
+use crate::error::{
+    NotpError,
+    NotpResult,
+};
 use crate::otp::OTP;
 use crate::store::DataStore;
 use magic_crypt::MagicCryptTrait;
@@ -31,7 +34,9 @@ pub(crate) fn get<T: DataStore>(
 
     let token = request
         .encryption_key
-        .expect("Cannot get encryption key!!")
+        .ok_or(NotpError::Generic(
+            "Could not get encryption key.".to_string(),
+        ))?
         .decrypt_base64_to_string(token)?;
 
     print_otp(&token, name, quiet);
