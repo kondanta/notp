@@ -34,9 +34,9 @@ pub(crate) fn get<T: DataStore>(
 
     let token = request
         .encryption_key
-        .ok_or(NotpError::Generic(
-            "Could not get encryption key.".to_string(),
-        ))?
+        .ok_or_else(|| {
+            NotpError::Generic("Could not get encryption key.".to_string())
+        })?
         .decrypt_base64_to_string(token)?;
 
     print_otp(&token, name, quiet);
