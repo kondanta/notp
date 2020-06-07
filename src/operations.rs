@@ -60,22 +60,7 @@ impl<'a, DataStore> Request<'a, DataStore> {
 pub(crate) struct Dispatcher {}
 
 impl Dispatcher {
-    /// Initializes the encryption key.
-    fn enc(
-        is_stdin: &bool,
-        key_canditate: Option<String>,
-    ) -> MagicCrypt256 {
-        // --stdin || --key
-        let key = if *is_stdin {
-            Some(read_from_stdin_securely().unwrap_or_else(|_| "".to_string()))
-        } else {
-            key_canditate
-        }
-        .unwrap_or_else(|| "".to_string());
-        let encryption_key = new_magic_crypt!(&key, 256);
 
-        encryption_key
-    }
 
     /// Performs a function call with using OperationType information that
     /// stored in `Dispatcher`.
@@ -88,8 +73,13 @@ impl Dispatcher {
 
         match &opt.operations {
             Some(OperationList::Add(param)) => {
+                let encryption_key_candidate = match param.stdin {
+                    true => read_from_stdin_securely()
+                        .unwrap_or_else(|_| "".to_string()),
+                    false => param.key.as_deref().unwrap_or("").to_string(),
+                };
                 let encryption_key =
-                    Dispatcher::enc(&param.stdin, param.key.clone());
+                    new_magic_crypt!(&encryption_key_candidate, 256);
                 let req = Request::new(
                     Some(&param.name),
                     store,
@@ -99,8 +89,14 @@ impl Dispatcher {
                 add(req).ok();
             }
             Some(OperationList::Get(param)) => {
+                // Dispatcher::perform_op(param, |_| get, store.clone());
+                let encryption_key_candidate = match param.stdin {
+                    true => read_from_stdin_securely()
+                        .unwrap_or_else(|_| "".to_string()),
+                    false => param.key.as_deref().unwrap_or("").to_string(),
+                };
                 let encryption_key =
-                    Dispatcher::enc(&param.stdin, param.key.clone());
+                    new_magic_crypt!(&encryption_key_candidate, 256);
                 let req = Request::new(
                     Some(&param.name),
                     store,
