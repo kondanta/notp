@@ -9,9 +9,16 @@ use self::{
     get::get,
     list::list,
 };
-use super::cli_args::OperationTypes;
+use super::cli_args::{
+    OperationList,
+    Opt,
+};
 use super::store::DataStore as DataStoreTrait;
+use super::util::read_from_stdin_securely;
 use magic_crypt::MagicCrypt256;
+
+#[cfg(feature = "kv-store")]
+use super::store::kv_store::SecretStore;
 
 /// Contains required data for individual operations to handle database
 /// operations.
@@ -50,64 +57,58 @@ impl<'a, DataStore> Request<'a, DataStore> {
 
 /// Function dispatcher. Responsibles from calling correct function with correct
 /// parameters
-pub(crate) struct Dispatcher<Store: DataStoreTrait> {
-    store:          Store,
-    mc:             MagicCrypt256,
-    is_quiet:       bool,
-    operation_type: OperationTypes,
-}
+pub(crate) struct Dispatcher {}
 
-impl<Store: DataStoreTrait> Dispatcher<Store> {
-    /// Construtcs a new `Dispatcher` with given arguments.
-    pub(crate) fn new(
-        store: Store,
-        mc: MagicCrypt256,
-        operation_type: OperationTypes,
-        is_quiet: bool,
-    ) -> Self {
-        Self {
-            store,
-            mc,
-            operation_type,
-            is_quiet,
+impl Dispatcher {
+    /// Initializes the encryption key.
+    fn init(
+        is_stdin: &bool,
+        key_canditate: Option<String>,
+    ) -> MagicCrypt256 {
+        // --stdin || --key
+        let key = if *is_stdin {
+            Some(read_from_stdin_securely().unwrap_or_else(|_| "".to_string()))
+        } else {
+            key_canditate
         }
+        .unwrap_or_else(|| "".to_string());
+        let encryption_key = new_magic_crypt!(&key, 256);
+
+        encryption_key
     }
 
     /// Performs a function call with using OperationType information that
     /// stored in `Dispatcher`.
-    pub(crate) fn dispatcher(self) {
-        match self.operation_type {
-            OperationTypes::List => {
-                list(Request::new(None, self.store, None)).ok();
+    pub(crate) fn dispatch() {
+        // Global store variable
+        #[cfg(feature = "kv-store")]
+        let store: SecretStore =
+            DataStoreTrait::new().expect("Could not create DataStore");
+        let opt = Opt::get_cli_args();
+        let encryption_key = Dispatcher::init(&opt.stdin, opt.key);
+
+        match &opt.operations {
+            Some(OperationList::Add(param)) => add(Request::new(
+                Some(&param.name),
+                store,
+                Some(encryption_key),
+            ))
+            .ok(),
+            Some(OperationList::Get(param)) => get(
+                Request::new(Some(&param.name), store, Some(encryption_key)),
+                param.quiet,
+            )
+            .ok(),
+            Some(OperationList::Delete(param)) => delete(Request::new(
+                Some(&param.name),
+                store,
+                Some(encryption_key),
+            ))
+            .ok(),
+            _ => {
+                list(Request::new(None, store, None)).ok();
+                None
             }
-            OperationTypes::Delete(ref s) => {
-                delete(Request::new(
-                    Some(s.to_owned().as_ref()),
-                    self.store,
-                    None,
-                ))
-                .ok();
-            }
-            OperationTypes::Add(ref s) => {
-                add(Request::new(
-                    Some(s.to_owned().as_ref()),
-                    self.store,
-                    Some(self.mc),
-                ))
-                .ok();
-            }
-            OperationTypes::Get(ref s) => {
-                get(
-                    Request::new(
-                        Some(s.to_owned().as_ref()),
-                        self.store,
-                        Some(self.mc),
-                    ),
-                    self.is_quiet,
-                )
-                .ok();
-            }
-            _ => println!("Will be implemented"),
         };
     }
 }
