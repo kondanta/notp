@@ -9,16 +9,6 @@ use structopt::StructOpt;
 pub(crate) struct Opt {
     #[structopt(subcommand)]
     pub operations: Option<OperationList>,
-    /// Encryption key for the file that notp going to use as a data source.
-    #[structopt(required_unless = "stdin", long, conflicts_with = "stdin")]
-    pub key: Option<String>,
-
-    /// Reads key securely from stdin.
-    ///
-    /// `stdin` option does not print characters on the screen. It works like
-    /// bash's read -s functionality.
-    #[structopt(required_unless = "key", long, conflicts_with = "key")]
-    pub stdin: bool,
 }
 
 #[derive(StructOpt, Debug, Clone)]
@@ -39,6 +29,17 @@ pub(crate) enum OperationList {
 #[derive(StructOpt, Debug, Clone)]
 pub(crate) struct AddCommand {
     pub name: String,
+
+    /// Encryption key for the file that notp going to use as a data source.
+    #[structopt(required_unless = "stdin", long, conflicts_with = "stdin")]
+    pub key: Option<String>,
+    /// Reads key securely from stdin.
+    ///
+    /// `stdin` option does not print characters on the screen. It works like
+    /// bash's read -s functionality.
+
+    #[structopt(required_unless = "key", long, conflicts_with = "key")]
+    pub stdin: bool,
 }
 
 #[derive(StructOpt, Debug, Clone)]
@@ -53,6 +54,17 @@ pub(crate) struct GetCommand {
     /// Suppresses the OTP output and just prints the code.
     #[structopt(short, long)]
     pub quiet: bool,
+
+    /// Encryption key for the file that notp going to use as a data source.
+    #[structopt(required_unless = "stdin", long, conflicts_with = "stdin")]
+    pub key: Option<String>,
+
+    /// Reads key securely from stdin.
+    ///
+    /// `stdin` option does not print characters on the screen. It works like
+    /// bash's read -s functionality.
+    #[structopt(required_unless = "key", long, conflicts_with = "key")]
+    pub stdin: bool,
 }
 
 impl Opt {

@@ -61,7 +61,7 @@ pub(crate) struct Dispatcher {}
 
 impl Dispatcher {
     /// Initializes the encryption key.
-    fn init(
+    fn enc(
         is_stdin: &bool,
         key_canditate: Option<String>,
     ) -> MagicCrypt256 {
@@ -85,29 +85,37 @@ impl Dispatcher {
         let store: SecretStore =
             DataStoreTrait::new().expect("Could not create DataStore");
         let opt = Opt::get_cli_args();
-        let encryption_key = Dispatcher::init(&opt.stdin, opt.key);
 
         match &opt.operations {
-            Some(OperationList::Add(param)) => add(Request::new(
-                Some(&param.name),
-                store,
-                Some(encryption_key),
-            ))
-            .ok(),
-            Some(OperationList::Get(param)) => get(
-                Request::new(Some(&param.name), store, Some(encryption_key)),
-                param.quiet,
-            )
-            .ok(),
-            Some(OperationList::Delete(param)) => delete(Request::new(
-                Some(&param.name),
-                store,
-                Some(encryption_key),
-            ))
-            .ok(),
+            Some(OperationList::Add(param)) => {
+                let encryption_key =
+                    Dispatcher::enc(&param.stdin, param.key.clone());
+                let req = Request::new(
+                    Some(&param.name),
+                    store,
+                    Some(encryption_key),
+                );
+
+                add(req).ok();
+            }
+            Some(OperationList::Get(param)) => {
+                let encryption_key =
+                    Dispatcher::enc(&param.stdin, param.key.clone());
+                let req = Request::new(
+                    Some(&param.name),
+                    store,
+                    Some(encryption_key),
+                );
+
+                get(req, param.quiet).ok();
+            }
+            Some(OperationList::Delete(param)) => {
+                let req = Request::new(Some(&param.name), store, None);
+                delete(req).ok();
+            }
             _ => {
-                list(Request::new(None, store, None)).ok();
-                None
+                let req = Request::new(None, store, None);
+                list(req).ok();
             }
         };
     }
