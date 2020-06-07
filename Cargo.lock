@@ -560,6 +560,7 @@ dependencies = [
  "ring",
  "rpassword",
  "structopt",
+ "version_check",
 ]
 
 [[package]]

@@ -31,6 +31,7 @@ magic-crypt = "3.0.0"
 kv = { version = "0.20.2", optional = true }
 rpassword = "4.0.5"
 bytevec = "0.2.0"
+version_check = "0.9.2"
 
 [profile.dev]
 # This isn't required for development builds, but makes development

@@ -29,7 +29,11 @@ mod store;
 mod util;
 
 use operations::Dispatcher;
+use version_check::is_min_version;
 
 fn main() {
-    Dispatcher::dispatch();
+    match is_min_version("1.40.0").unwrap_or(false) {
+        true => Dispatcher::dispatch(),
+        false => eprintln!("Please update Rust to 1.40.0 or above"),
+    };
 }
