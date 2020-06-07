@@ -28,41 +28,8 @@ mod otp;
 mod store;
 mod util;
 
-use cli_args::Opt;
 use operations::Dispatcher;
-use store::DataStore;
-use util::read_from_stdin_securely;
-
-#[cfg(feature = "kv-store")]
-use store::kv_store::SecretStore;
 
 fn main() {
-    let opt = Opt::get_cli_args();
-    let map = opt.export_functions();
-    // Global store variable
-    #[cfg(feature = "kv-store")]
-    let store: SecretStore =
-        DataStore::new().expect("Cannot create datastore object");
-
-    // --stdin || --key
-    let key = if opt.stdin {
-        Some(read_from_stdin_securely().unwrap_or_else(|_| "".to_owned()))
-    } else {
-        opt.key.clone()
-    }
-    .unwrap_or_else(|| "".to_owned());
-
-    let mc = new_magic_crypt!(&key, 256);
-    // Dispatch correct function
-    for (operation_type, is_invoked) in map {
-        if is_invoked {
-            let d = Dispatcher::new(
-                store.clone(),
-                mc.clone(),
-                operation_type,
-                opt.quiet,
-            );
-            d.dispatcher();
-        }
-    }
+    Dispatcher::dispatch();
 }
