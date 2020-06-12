@@ -8,8 +8,8 @@ use bytevec::{
     ByteEncodable,
 };
 
-/// OTP generator
-pub(crate) struct OTP {
+use otp::make_totp;
+
 use super::error::{
     NotpError,
     NotpResult,
@@ -22,6 +22,36 @@ pub(crate) trait OTP<T> {
         epoch: u64,
         time_step: u64,
     ) -> NotpResult<T>;
+}
+
+/// New implementation of otp generator.
+///
+/// Takes token and stores it as `String`. It does not use any complex types to
+/// handle token generation.
+pub(crate) struct OTPString {
+    secret: String,
+}
+
+impl OTP<u32> for OTPString {
+    /// Returns new OTPString instance that holds `String`: token.
+    fn new(token: &str) -> Self {
+        Self {
+            secret: token.to_string(),
+        }
+    }
+
+    /// Generates One Time Password using given otp token.
+    fn generate(
+        &self,
+        epoch: u64,
+        time_step: u64,
+    ) -> NotpResult<u32> {
+        let totp = make_totp(&self.secret, time_step, epoch as i64);
+        match totp {
+            Ok(code) => Ok(code),
+            Err(e) => Err(NotpError::OTPStringError(e)),
+        }
+    }
 }
 
 /// OTP generator that uses `Vec<u8>`
