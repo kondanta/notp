@@ -33,6 +33,7 @@ pub(crate) struct AddCommand {
     /// Encryption key for the file that notp going to use as a data source.
     #[structopt(required_unless = "stdin", long, conflicts_with = "stdin")]
     pub key: Option<String>,
+
     /// Reads key securely from stdin.
     ///
     /// `stdin` option does not print characters on the screen. It works like
