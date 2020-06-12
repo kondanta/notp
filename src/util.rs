@@ -39,12 +39,18 @@ pub(crate) fn create_folder(path: &str) -> NotpResult<()> {
     Err(NotpError::Generic("Cannot find the file!".to_string()))
 }
 
+#[allow(dead_code)]
+pub(crate) fn remove_folder(path: &str) -> NotpResult<()> {
+    if does_path_exists(&path) {
         if let Some(p) = get_config_dir() {
-            let notp_path =
+            let folder_path =
                 format!("{}/{}", p.to_str().unwrap_or_default(), path);
-            let _ = fs::create_dir_all(&notp_path).is_ok();
+            return remove_dir(folder_path)
+                .map(|_| ())
+                .map_err(|e| NotpError::Generic(e.to_string()));
         }
     }
+    Err(NotpError::Generic("Config path does not exist".to_string()))
 }
 
 /// Returns to the full path of the given path.
