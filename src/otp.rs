@@ -10,12 +10,29 @@ use bytevec::{
 
 /// OTP generator
 pub(crate) struct OTP {
+use super::error::{
+    NotpError,
+    NotpResult,
+};
+
+pub(crate) trait OTP<T> {
+    fn new(token: &str) -> Self;
+    fn generate(
+        &self,
+        epoch: u64,
+        time_step: u64,
+    ) -> NotpResult<T>;
+}
+
+/// OTP generator that uses `Vec<u8>`
+pub(crate) struct OTPHash {
     secret: Vec<u8>,
 }
 
-impl OTP {
+impl OTP<u64> for OTPHash {
     /// Creates new OTP struct with a token.
-    pub(crate) fn new(token: &str) -> Self {
+    fn new(token: &str) -> Self {
+        // Convert &str into Vector of u8
         let dc =
             base32::decode(base32::Alphabet::RFC4648 { padding: false }, token)
                 .unwrap_or_else(|| {
@@ -27,12 +44,29 @@ impl OTP {
     }
 
     /// Generates 6 digit one time password.
-    pub(crate) fn generate_otp(
+    /// WARNING: This function generates 5 digit codes time to times
+    fn generate(
         &self,
-        digits: u32,
         epoch: u64,
         time_step: u64,
-    ) -> u64 {
-        totp_raw_now(&self.secret, digits, epoch, time_step, &HashType::SHA1)
+    ) -> NotpResult<u64> {
+        let token =
+            totp_raw_now(&self.secret, 6, epoch, time_step, &HashType::SHA1);
+        let len = token
+            .to_string()
+            .chars()
+            .map(|d| d.to_digit(10).unwrap_or_default())
+            .collect::<Vec<_>>();
+        if len.len() != 6 {
+            return Err(NotpError::Generic(
+                "OTPHash generated a number that does not even contain 6 \
+                 digits."
+                    .to_string(),
+            ));
+        }
+        Ok(token)
+    }
+}
+
     }
 }
