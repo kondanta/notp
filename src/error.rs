@@ -1,5 +1,6 @@
 use kv::Error as KVError;
 use magic_crypt::MagicCryptError as MagicError;
+use otp::Error as OTPStringError;
 use std::error::Error as StdError;
 use std::fmt::{
     Display,
@@ -18,6 +19,8 @@ pub(crate) enum NotpError {
     Kv(KVError),
 
     McError(MagicError),
+
+    OTPStringError(OTPStringError),
 }
 
 use NotpError::*;
@@ -31,6 +34,7 @@ impl Display for NotpError {
             Generic(ref string) => write!(f, "Generic error: {}", string),
             Kv(ref err) => write!(f, "SecretStore error: {}", err),
             Io(ref err) => write!(f, "I/O error: {}", err),
+            OTPStringError(ref err) => write!(f, "OTP Error: {}", err),
             McError(ref err) => {
                 write!(f, "Encryption/Decryption error: {}", err)
             }
@@ -44,6 +48,7 @@ impl StdError for NotpError {
             Kv(ref err) => Some(err),
             Io(ref err) => Some(err),
             McError(ref err) => Some(err),
+            OTPStringError(ref err) => Some(err),
             Generic(_) => None,
         }
     }
@@ -70,6 +75,12 @@ impl From<MagicError> for NotpError {
 impl From<String> for NotpError {
     fn from(err: String) -> Self {
         Generic(err)
+    }
+}
+
+impl From<OTPStringError> for NotpError {
+    fn from(err: OTPStringError) -> Self {
+        OTPStringError(err)
     }
 }
 
