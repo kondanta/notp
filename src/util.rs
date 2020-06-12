@@ -24,7 +24,7 @@ pub(crate) fn does_path_exists(path: &str) -> bool {
 }
 
 fn get_config_dir() -> Option<PathBuf> {
-    dirs::config_dir()
+    config_dir()
 }
 
 /// Creates folder inside the config folder.
