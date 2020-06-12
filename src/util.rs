@@ -28,8 +28,17 @@ fn get_config_dir() -> Option<PathBuf> {
 }
 
 /// Creates folder inside the config folder.
-pub fn create_folder(path: &str) {
-    if !is_path_exists(path) {
+pub(crate) fn create_folder(path: &str) -> NotpResult<()> {
+    if let Some(p) = get_config_dir() {
+        let notp_path = format!("{}/{}", p.to_str().unwrap_or_default(), path);
+        return match create_dir_all(&notp_path) {
+            Ok(_) => Ok(()),
+            Err(e) => Err(NotpError::Io(e)),
+        };
+    }
+    Err(NotpError::Generic("Cannot find the file!".to_string()))
+}
+
         if let Some(p) = get_config_dir() {
             let notp_path =
                 format!("{}/{}", p.to_str().unwrap_or_default(), path);
