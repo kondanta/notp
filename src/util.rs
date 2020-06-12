@@ -1,6 +1,13 @@
-use crate::error::NotpResult;
+use super::error::{
+    NotpError,
+    NotpResult,
+};
+use dirs::config_dir;
 use rpassword::read_password_from_tty;
-use std::fs;
+use std::fs::{
+    create_dir_all,
+    remove_dir,
+};
 use std::io;
 use std::path::{
     Path,
@@ -8,7 +15,7 @@ use std::path::{
 };
 
 /// Checks if the given path exists or not
-pub fn is_path_exists(path: &str) -> bool {
+pub(crate) fn does_path_exists(path: &str) -> bool {
     if let Some(p) = get_config_dir() {
         let notp_path = format!("{}/{}", p.to_str().unwrap_or_default(), path);
         return Path::new(&notp_path).exists();
