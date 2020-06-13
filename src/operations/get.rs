@@ -3,7 +3,10 @@ use crate::error::{
     NotpError,
     NotpResult,
 };
-use crate::otp::OTP;
+use crate::otp::{
+    OTPString,
+    OTP,
+};
 use crate::store::DataStore;
 use magic_crypt::MagicCryptTrait;
 
@@ -21,11 +24,7 @@ pub(crate) fn get<T: DataStore>(
 ) -> NotpResult<()> {
     let store = request.store;
     let name = request.key.unwrap_or_default();
-
-    let token = match store.get(String::from(name)) {
-        Ok(s) => s,
-        Err(_) => "".to_string(),
-    };
+    let token = store.get(String::from(name))?;
 
     if token.is_empty() {
         eprintln!("Cannot find the token, exiting...!");
@@ -39,9 +38,7 @@ pub(crate) fn get<T: DataStore>(
         })?
         .decrypt_base64_to_string(token)?;
 
-    print_otp(&token, name, quiet);
-
-    Ok(())
+    print_otp(&token, name, quiet)
 }
 
 // utility function for printing the OTP code.
@@ -49,11 +46,20 @@ fn print_otp(
     token: &str,
     name: &str,
     quiet: bool,
-) {
-    let otp = OTP::new(&token);
-    if quiet {
-        print!("{}", otp.generate_otp(6, 0, 30))
-    } else {
-        println!("OTP code for the {}: {}", name, otp.generate_otp(6, 0, 30))
+) -> NotpResult<()> {
+    // BEWARE! Token contains /r on Windows. Haven't tried it on other platforms
+    // but it will probably contain some EOL kind of delimeter.
+    let otp = OTPString::new(token.trim()).generate(0, 30);
+    match otp {
+        Ok(code) => {
+            if quiet {
+                print!("{}", code);
+                Ok(())
+            } else {
+                println!("OTP code for the {}: {}", name, code);
+                Ok(())
+            }
+        }
+        Err(e) => Err(e),
     }
 }
