@@ -29,10 +29,7 @@ pub(crate) fn add<T: DataStore>(request: Request<'_, T>) -> NotpResult<()> {
     // we need to flush stdout in order to fetch correct input from stdin.
     stdout().flush()?;
     let b64 = encrypt_value(mc);
-    match store.insert(String::from(name), b64) {
-        Ok(_) => Ok(()),
-        Err(e) => Err(e),
-    }
+    store.insert(String::from(name), b64)
 }
 
 fn encrypt_value(mc: MagicCrypt256) -> String {
