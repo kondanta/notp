@@ -2,7 +2,10 @@ pub(crate) mod kv_store;
 use crate::error::NotpResult;
 
 pub(crate) trait DataStore: Sized {
-    fn new() -> NotpResult<Self>;
+    fn new(
+        path: Option<&str>,
+        store: Option<&str>,
+    ) -> NotpResult<Self>;
     fn insert(
         &self,
         key: String,

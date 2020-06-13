@@ -4,16 +4,27 @@ use crate::error::{
     NotpError,
     NotpResult,
 };
-use crate::util::get_folder_path;
+use crate::util::{
+    create_folder,
+    does_path_exists,
+    get_folder_path,
+};
 use kv::{
     Bucket,
     Config,
     Store,
 };
 
-#[derive(Clone)]
+//#[derive(Clone)]
 pub(crate) struct SecretStore {
     bucket: Bucket<'static, String, String>,
+}
+
+impl SecretStore {
+    /// Creates the folder with given path.
+    pub(self) fn init(path: &str) -> NotpResult<()> {
+        create_folder(&path)
+    }
 }
 
 impl DataStore for SecretStore {
@@ -24,16 +35,22 @@ impl DataStore for SecretStore {
     /// use store::SecretStore;
     /// let store = SecretStore::new()?;
     /// ```
-    fn new() -> NotpResult<Self> {
-        if let Some(path) = get_folder_path("notp") {
-            let cfg = Config::new(path);
-            let store = Store::new(cfg)?;
-            let bucket = store.bucket::<String, String>(Some("store"))?;
+    fn new(
+        mut path: Option<&str>,
+        mut store: Option<&str>,
+    ) -> NotpResult<Self> {
+        let actual_path = path.get_or_insert("notp");
+        if does_path_exists(actual_path) {
+            SecretStore::init(actual_path)?;
+        }
+        if let Some(p) = get_folder_path(actual_path) {
+            let cfg = Config::new(p);
+            let s = Store::new(cfg)?;
+            let bucket =
+                s.bucket::<String, String>(Some(store.get_or_insert("store")))?;
             return Ok(Self { bucket });
         };
-        Err(NotpError::Generic(String::from(
-            "Cannot find the notp folder!",
-        )))
+        Err(NotpError::Generic("Cannot create KV instance!".to_string()))
     }
 
     /// Inserts new secret into storage
