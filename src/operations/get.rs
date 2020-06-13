@@ -3,8 +3,9 @@ use crate::error::{
     NotpError,
     NotpResult,
 };
+
 use crate::otp::{
-    OTPString,
+    OtpGenerator,
     OTP,
 };
 use crate::store::DataStore;
@@ -49,7 +50,8 @@ fn print_otp(
 ) -> NotpResult<()> {
     // BEWARE! Token contains /r on Windows. Haven't tried it on other platforms
     // but it will probably contain some EOL kind of delimeter.
-    let otp = OTPString::new(token.trim()).generate(0, 30);
+    let otp = OtpGenerator::new(token.trim()).generate(0, 30);
+
     match otp {
         Ok(code) => {
             if quiet {

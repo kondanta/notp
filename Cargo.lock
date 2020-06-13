@@ -149,12 +149,6 @@ checksum = "2e8c087f005730276d1096a652e92a8bacee2e2472bcc9715a74d2bec38b5820"
 
 [[package]]
 name = "byte-tools"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0919189ba800c7ffe8778278116b7e0de3905ab81c72abb69c85cbfef7991279"
-
-[[package]]
-name = "byte-tools"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "560c32574a12a89ecd91f5e742165893f86e3ab98d21f8ea548658eb9eef5f40"
@@ -264,16 +258,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "crypto-mac"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dba62c86c26dcba13c278afcaac0c7452486fe604a2668a0dfa4e0edc98d8a9e"
-dependencies = [
- "constant_time_eq",
- "generic-array 0.7.3",
-]
-
-[[package]]
 name = "data-encoding"
 version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -298,15 +282,6 @@ dependencies = [
 
 [[package]]
 name = "digest"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a68d759d7a66a4f63d5bd2a2b14ad7e8cf93fe8c9be227031cd4e72ab0e9ee8"
-dependencies = [
- "generic-array 0.7.3",
-]
-
-[[package]]
-name = "digest"
 version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "03b072242a8cbaf9c145665af9d250c59af3b958f83ed6824e13533cf76d5b90"
@@ -321,16 +296,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f3d0c8c8752312f9713efd397ff63acb9f85585afbf179282e720e7704954dd5"
 dependencies = [
  "generic-array 0.12.3",
-]
-
-[[package]]
-name = "digest-buffer"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4eb92364e9f6d3da159257250532d448b218406d2acb149f724e8f48e9f5cb9a"
-dependencies = [
- "byte-tools 0.1.3",
- "generic-array 0.7.3",
 ]
 
 [[package]]
@@ -395,16 +360,6 @@ dependencies = [
 
 [[package]]
 name = "generic-array"
-version = "0.7.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dbe043cf9b85297937897087de81f590361686e1ac2d4d471b45435de5dfb6a6"
-dependencies = [
- "nodrop",
- "typenum",
-]
-
-[[package]]
-name = "generic-array"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef25c5683767570c2bbd7deba372926a55eaae9982d7726ee2a1050239d45b9d"
@@ -457,17 +412,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "91780f809e750b0a89f5544be56617ff6b1227ee485bcb06ebe10cdf89bd3b71"
 dependencies = [
  "libc",
-]
-
-[[package]]
-name = "hmac"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bdb5aa9647ba4711e9d6968dc1c810cd23989ed435443ca962e1bf6d8b8b83ff"
-dependencies = [
- "crypto-mac",
- "digest 0.5.2",
- "generic-array 0.7.3",
 ]
 
 [[package]]
@@ -536,7 +480,7 @@ dependencies = [
  "digest 0.7.6",
  "digest 0.8.1",
  "md-5",
- "sha2 0.8.2",
+ "sha2",
  "tiger-digest",
 ]
 
@@ -567,12 +511,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nodrop"
-version = "0.1.14"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72ef4a56884ca558e5ddb05a1d1e7e1bfd9a68d9ed024c21704cc98872dae1bb"
-
-[[package]]
 name = "notp"
 version = "2.1.0"
 dependencies = [
@@ -582,25 +520,11 @@ dependencies = [
  "dirs",
  "kv",
  "magic-crypt",
- "oath",
  "otp",
  "ring",
  "rpassword",
  "structopt",
  "version_check",
-]
-
-[[package]]
-name = "oath"
-version = "0.10.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec6405dc6afe8219020d535f9ad888a12b191bbc8ce1c55f7ee663bde5be80ca"
-dependencies = [
- "digest 0.5.2",
- "hmac",
- "rustc-hex",
- "sha-1",
- "sha2 0.5.3",
 ]
 
 [[package]]
@@ -749,12 +673,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustc-hex"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ceb8ce7a5e520de349e1fa172baeba4a9e8d5ef06c47471863530bc4972ee1e"
-
-[[package]]
 name = "rustversion"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -789,32 +707,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "sha-1"
-version = "0.3.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8347606816471548cd60f0abd5ef0d513a81f5202dbdab9c09f17a15b5248484"
-dependencies = [
- "byte-tools 0.1.3",
- "digest 0.5.2",
- "digest-buffer",
- "fake-simd",
- "generic-array 0.7.3",
-]
-
-[[package]]
-name = "sha2"
-version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "84920f9ac881e94e33ec89e1b3dcd36040523a308a92548e01217ce35d8cf6a8"
-dependencies = [
- "byte-tools 0.1.3",
- "digest 0.5.2",
- "digest-buffer",
- "fake-simd",
- "generic-array 0.7.3",
 ]
 
 [[package]]
