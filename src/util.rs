@@ -31,6 +31,7 @@ pub(crate) fn does_path_exists(path: &str) -> bool {
         .unwrap_or_else(|_| false)
 }
 
+/// Wrapper function for getting config directory
 fn get_config_dir() -> Option<PathBuf> {
     config_dir()
 }

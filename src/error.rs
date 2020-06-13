@@ -10,16 +10,25 @@ use std::fmt::{
 use std::io::Error as IoError;
 use std::result::Result as StdResult;
 
+/// Error type of the Notp project.
 #[derive(Debug)]
 pub(crate) enum NotpError {
+    /// Standart error that being used for widely in this project. As long as error's not
+    /// related with the other types, Generic would be the choice of error.
     Generic(String),
 
+    /// I/O related errors. Most of the time, creating and deleting folders
+    /// will return to this error.
     Io(IoError),
 
+    /// Key Value error. It is related to the KV Store. It is going to be depreciated or
+    /// generalized with some sort of trait.
     Kv(KVError),
 
+    /// Encryption related error. More specificly magicrypt related errors.
     McError(MagicError),
 
+    /// Errors that is thrown while generating OTP code.
     OTPStringError(OTPStringError),
 }
 
@@ -84,4 +93,5 @@ impl From<OTPStringError> for NotpError {
     }
 }
 
+/// Result type. It returns type T with NotpError.
 pub(crate) type NotpResult<T> = StdResult<T, NotpError>;
