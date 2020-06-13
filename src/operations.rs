@@ -13,7 +13,6 @@ use super::cli_args::{
     OperationList,
     Opt,
 };
-use super::error::NotpResult;
 use super::store::DataStore as DataStoreTrait;
 use super::util::read_from_stdin_securely;
 use magic_crypt::MagicCrypt256;
@@ -66,8 +65,8 @@ impl Dispatcher {
     pub(crate) fn dispatch() {
         // Global store variable
         #[cfg(feature = "kv-store")]
-        let store: SecretStore =
-            DataStoreTrait::new().expect("Could not create DataStore");
+        let store: SecretStore = DataStoreTrait::new(None, None)
+            .expect("Could not create DataStore");
         let opt = Opt::get_cli_args();
 
         match &opt.operations {
@@ -85,7 +84,13 @@ impl Dispatcher {
                     Some(encryption_key),
                 );
 
-                add(req).ok();
+                match add(req) {
+                    Ok(_) => (),
+                    Err(e) => eprintln!(
+                        "Error while inserting the secret! {}",
+                        e.to_string()
+                    ),
+                };
             }
             Some(OperationList::Get(param)) => {
                 // Dispatcher::perform_op(param, |_| get, store.clone());
@@ -102,15 +107,39 @@ impl Dispatcher {
                     Some(encryption_key),
                 );
 
-                get(req, param.quiet).ok();
+                match get(req, param.quiet) {
+                    Ok(_) => (),
+                    Err(e) => {
+                        eprintln!(
+                            "Error while generating the OTP code! {}",
+                            e.to_string()
+                        );
+                    }
+                };
             }
             Some(OperationList::Delete(param)) => {
                 let req = Request::new(Some(&param.name), store, None);
-                delete(req).ok();
+                match delete(req) {
+                    Ok(_) => (),
+                    Err(e) => {
+                        eprintln!(
+                            "Error while deleting the secret! {}",
+                            e.to_string()
+                        );
+                    }
+                }
             }
             _ => {
                 let req = Request::new(None, store, None);
-                list(req).ok();
+                match list(req) {
+                    Ok(_) => (),
+                    Err(e) => {
+                        eprintln!(
+                            "Error while listing available secrets! {}",
+                            e.to_string()
+                        );
+                    }
+                }
             }
         };
     }
