@@ -33,7 +33,62 @@ pub(crate) fn add<T: DataStore>(request: Request<'_, T>) -> NotpResult<()> {
 }
 
 fn encrypt_value(mc: MagicCrypt256) -> String {
+    if cfg!(test) {
+        return mc.encrypt_str_to_base64("");
+    }
     let mut value = read_from_stdin().unwrap_or_else(|_| "".to_string());
     value.pop();
     mc.encrypt_str_to_base64(value)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        add,
+        Request,
+    };
+    use crate::operations::delete::delete;
+    use crate::store::{
+        kv_store::SecretStore,
+        DataStore as DataStoreTrait,
+    };
+    use crate::util::{
+        create_folder,
+        remove_folder,
+    };
+    // use magic_crypt::MagicCrypt256;
+
+    fn kv_init<'a>(
+        key: Option<&'a str>,
+        enc: &str,
+        path: Option<&'a str>,
+        store: Option<&'a str>,
+    ) -> Request<'a, SecretStore> {
+        #[cfg(feature = "kv-store")]
+        let store: SecretStore = DataStoreTrait::new(path, store)
+            .expect("Could not create DataStore");
+        let mc = new_magic_crypt!(enc, 256);
+        Request::new(key, store, Some(mc))
+    }
+
+    #[test]
+    fn should_insert_data() {
+        let path = "Test";
+        let _ = create_folder(path);
+        let r = add(kv_init(
+            Some("TestData"),
+            "TestKey",
+            Some(path),
+            Some("Test"),
+        ));
+        assert!(r.is_ok());
+        delete(kv_init(
+            Some("TestData"),
+            "TestKey",
+            Some(path),
+            Some("Test"),
+        ))
+        .ok();
+        remove_folder("Test").ok();
+    }
 }
