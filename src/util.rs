@@ -86,22 +86,53 @@ pub(crate) fn read_from_stdin_securely() -> NotpResult<String> {
 mod tests {
     use crate::util::{
         create_folder,
-        is_path_exists,
+        does_path_exists,
+        get_folder_path,
+        remove_folder,
     };
 
     #[test]
-    fn is_home_exist() {
-        assert!(is_path_exists(""));
+    fn should_get_folder_path() {
+        let fname = "notp";
+        let path = get_folder_path(&fname);
+        assert_eq!(true, path.is_some());
+    }
+
+    #[test]
+    fn should_get_folder_return_none() {
+        let fname = "Gibberish";
+        let path = get_folder_path(&fname);
+        assert_eq!(true, path.is_some());
     }
 
     #[test]
     fn is_home_exists_should_return_false() {
-        assert_eq!(false, is_path_exists("PathThatDoesNotExists"));
+        assert_eq!(false, does_path_exists("PathThatDoesNotExists"));
     }
 
     #[test]
     fn should_create_notp_folder() {
-        create_folder("notp");
-        assert_eq!(true, is_path_exists("notp"));
+        create_folder("notp").ok();
+        assert_eq!(true, does_path_exists("notp"));
+    }
+
+    #[test]
+    fn should_delete_folder() {
+        let fname = "FolderThatNotExists";
+        if !does_path_exists(&fname) {
+            create_folder(&fname).ok();
+        }
+        assert_eq!(true, does_path_exists(&fname));
+        let result = remove_folder(&fname);
+        assert_eq!(true, result.is_ok());
+        assert_eq!(false, does_path_exists(&fname));
+    }
+
+    #[test]
+    fn delete_folder_should_return_err() {
+        let fname = "SomeGibberish";
+
+        let result = remove_folder(fname);
+        assert_eq!(true, result.is_err());
     }
 }

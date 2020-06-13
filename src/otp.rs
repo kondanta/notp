@@ -98,5 +98,19 @@ impl OTP<u64> for OTPHash {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::{
+        OTPHash,
+        OTPString,
+        OTP,
+    };
+
+    #[test]
+    fn check_new_otp_logic() {
+        const KEY: &str = "4RRWVF72DPWMRBWS";
+        let o = OTPHash::new(&KEY).generate(0, 30).unwrap_or_default();
+        let new_otp = OTPString::new(&KEY).generate(0, 30).unwrap_or_default();
+        assert_eq!(o as u32, new_otp);
     }
 }
