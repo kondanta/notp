@@ -85,7 +85,7 @@ impl Dispatcher {
                 );
 
                 match add(req) {
-                    Ok(_) => (),
+                    Ok(()) => println!("{}' inserted!", &param.name),
                     Err(e) => eprintln!(
                         "Error while inserting the secret! {}",
                         e.to_string()
@@ -120,7 +120,7 @@ impl Dispatcher {
             Some(OperationList::Delete(param)) => {
                 let req = Request::new(Some(&param.name), store, None);
                 match delete(req) {
-                    Ok(_) => (),
+                    Ok(()) => println!("{}'s deleted!", param.name),
                     Err(e) => {
                         eprintln!(
                             "Error while deleting the secret! {}",
@@ -132,7 +132,7 @@ impl Dispatcher {
             _ => {
                 let req = Request::new(None, store, None);
                 match list(req) {
-                    Ok(_) => (),
+                    Ok(()) => (),
                     Err(e) => {
                         eprintln!(
                             "Error while listing available secrets! {}",
