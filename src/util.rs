@@ -114,32 +114,39 @@ mod tests {
     };
 
     #[test]
-    fn should_get_folder_path() {
+    fn find_folder_path() {
         let fname = "notp";
         let path = get_folder_path(&fname);
         assert_eq!(true, path.is_some());
     }
 
     #[test]
-    fn should_get_folder_return_none() {
+    fn folder_does_not_exist() {
         let fname = "Gibberish";
         let path = get_folder_path(&fname);
         assert_eq!(true, path.is_some());
     }
 
     #[test]
-    fn is_home_exists_should_return_false() {
+    fn path_does_not_exist() {
         assert_eq!(false, does_path_exists("PathThatDoesNotExists"));
     }
 
     #[test]
-    fn should_create_notp_folder() {
-        create_folder("notp").ok();
-        assert_eq!(true, does_path_exists("notp"));
+    fn path_does_exist() {
+        create_folder("test").ok();
+        assert_eq!(true, does_path_exists("test"));
+        remove_folder("test").ok();
     }
 
     #[test]
-    fn should_delete_folder() {
+    fn cannot_create_folder() {
+        let resp = create_folder("");
+        assert_eq!(true, resp.is_err());
+    }
+
+    #[test]
+    fn delete_folder() {
         let fname = "FolderThatNotExists";
         if !does_path_exists(&fname) {
             create_folder(&fname).ok();
@@ -151,7 +158,7 @@ mod tests {
     }
 
     #[test]
-    fn delete_folder_should_return_err() {
+    fn couldnt_delete_folder_that_does_not_exist() {
         let fname = "SomeGibberish";
 
         let result = remove_folder(fname);
