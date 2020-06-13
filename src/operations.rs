@@ -61,28 +61,6 @@ impl<'a, DataStore> Request<'a, DataStore> {
 pub(crate) struct Dispatcher {}
 
 impl Dispatcher {
-    // fn perform_op<'a, T, S: DataStoreTrait>(
-    //     param: T,
-    //     f: impl Fn(Request<'a, S>) -> NotpResult<()>,
-    //     store: S,
-    // ) -> NotpResult<()> {
-    //     let encryption_key_candidate = match param.stdin {
-    //         true => {
-    //             read_from_stdin_securely().unwrap_or_else(|_| "".to_string())
-    //         }
-    //         false => param.key.as_deref().unwrap_or("").to_string(),
-    //     };
-    //     let encryption_key = new_magic_crypt!(&encryption_key_candidate,
-    // 256);     let req = Request::new(
-    //         Some(&param.name),
-    //         store,
-    //         Some(encryption_key),
-    //         param.quiet,
-    //     );
-
-    //     f(req)
-    // }
-
     /// Performs a function call with using OperationType information that
     /// stored in `Dispatcher`.
     pub(crate) fn dispatch() {
