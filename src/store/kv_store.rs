@@ -37,20 +37,22 @@ impl DataStore for SecretStore {
     /// ```
     fn new(
         mut path: Option<&str>,
-        mut store: Option<&str>,
+        mut store_name: Option<&str>,
     ) -> NotpResult<Self> {
         let actual_path = path.get_or_insert("notp");
         if does_path_exists(actual_path) {
             SecretStore::init(actual_path)?;
         }
-        if let Some(p) = get_folder_path(actual_path) {
-            let cfg = Config::new(p);
-            let s = Store::new(cfg)?;
-            let bucket =
-                s.bucket::<String, String>(Some(store.get_or_insert("store")))?;
-            return Ok(Self { bucket });
-        };
-        Err(NotpError::Generic("Cannot create KV instance!".to_string()))
+        let store = get_folder_path(actual_path)
+            .map(|p| Store::new(Config::new(p)))
+            .ok_or_else(|| {
+                NotpError::Generic("Cannot create KV instance!".to_string())
+            })?;
+        let bucket = store?.bucket::<String, String>(Some(
+            store_name.get_or_insert("store"),
+        ))?;
+
+        Ok(Self { bucket })
     }
 
     /// Inserts new secret into storage
