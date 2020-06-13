@@ -58,10 +58,7 @@ pub(crate) fn remove_folder(path: &str) -> NotpResult<()> {
 /// Let's say we want to get notp folder's full path. All we need to do is
 /// saying `get_folder_path("notp")` and this function will return to the
 /// full path such as `/home/user/.config/notp`.
-pub fn get_folder_path(path: &str) -> Option<String> {
-    if !is_path_exists(path) {
-        create_folder(path);
-    }
+pub(crate) fn get_folder_path(path: &str) -> Option<String> {
     if let Some(p) = get_config_dir() {
         let folder_path =
             format!("{}/{}", p.to_str().unwrap_or_default(), path);
