@@ -53,15 +53,27 @@ jobs:
         with:
           command: clippy
           args: -- -D warnings
-   test:
-     name: Tests
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@master
-       - uses: actions-rs/toolchan@v1
-         with:
-           toolchain: nightly
-           override: true
-      - uses: actions-rs/cargo@v1
+  test:
+    name: Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          profile: minimal
+
+      - name: Execute tests
+        uses: actions-rs/cargo@v1
         with:
           command: test
+          args: --all

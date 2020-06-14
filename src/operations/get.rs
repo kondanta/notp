@@ -56,7 +56,7 @@ fn print_otp(
     let otp = OtpGenerator::new(token.trim()).generate(0, 30);
 
     otp.map_or_else(
-        |e| Err(e),
+        Err,
         |code| {
             if clip {
                 let mut ctx: ClipboardContext = ClipboardProvider::new()
