@@ -19,11 +19,11 @@ $ notp --help
 $ notp --add taylan-google --key superSecretKey
 # you have to provide secret code when stdin prompts.
 # OR
-$ notp --add taylan-google --stdin
+$ notp add taylan-google --stdin
 # Key: <you will type your encryption key here>
 # Enter secret prompt: <You will paste your OTP secret here>
-$ notp --list
-$ notp --get <name> --key superSecretKey 
+$ notp list
+$ notp get <name> --key superSecretKey 
 ```
 OTP generation only supports 6 digit codes, for now.
 
@@ -37,7 +37,7 @@ so it is important that the system clock have at least one-minute accuracy.
 
 Adding new secret:
 ```bash
-$ notp --add AWS --key ttaayyllaann 
+$ notp add AWS --key ttaayyllaann 
 Please enter the secret: NRNM7KGFTR6SUMPBAEMBETM2WGKVUWHH6Y4VEGNPZON3GMVXBHF...
 $
 # There won't be any confirmation messages that indicates successfull insertion
@@ -46,7 +46,7 @@ $
 
 Checking existing secrets you have:
 ```bash
-$ notp --list
+$ notp
 1. AWS
 2. Google
 $
@@ -54,19 +54,19 @@ $
 
 Generating the OTP code:
 ```bash
-$ notp --get AWS --key ttaayyllaann
+$ notp get AWS --key ttaayyllaann
 OTP code for the AWS: 442659
 $ 
 ```
 
 Deleting a secret:
 ```bash
-$ notp --delete AWS
+$ notp delete AWS
 AWS Deleted!
 ```
 
 Using with CLI:
 ```bash
-$ notp --key ttaayyllaann -q --get AWS
+$ notp  get AWS --key ttaayyllaann -q
 442659
 ```
