@@ -86,7 +86,7 @@ pub(crate) fn remove_folder(path: &str) -> NotpResult<()> {
 pub(crate) fn get_folder_path(path: &str) -> Option<String> {
     get_config_dir().map_or_else(
         || None,
-        |p| Some(format!("{}/{}", p.to_str().unwrap_or_default(), path)),
+        |path_buf| Some(format!("{}/{}", path_buf.to_str().unwrap_or_default(), path)),
     )
 }
 
