@@ -65,3 +65,62 @@ fn print_otp(
         Err(e) => Err(e),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        get,
+        Request,
+    };
+    use crate::operations::{
+        add::add,
+        delete::delete,
+    };
+    use crate::store::{
+        kv_store::SecretStore,
+        DataStore as DataStoreTrait,
+    };
+    use crate::util::{
+        create_folder,
+        remove_folder,
+    };
+
+    fn kv_init<'a>(
+        key: Option<&'a str>,
+        enc: &str,
+        path: Option<&'a str>,
+        store: Option<&'a str>,
+    ) -> Request<'a, SecretStore> {
+        #[cfg(feature = "kv-store")]
+        let store: SecretStore = DataStoreTrait::new(path, store)
+            .expect("Could not create DataStore");
+        let mc = new_magic_crypt!(enc, 256);
+        Request::new(key, store, Some(mc))
+    }
+
+    #[test]
+    fn should_get_data() {
+        let path = "TestGetData";
+        let _ = create_folder(path);
+        add(kv_init(
+            Some("TestGetData"),
+            "TestKey",
+            Some(path),
+            Some("Test"),
+        ))
+        .ok();
+        let r = get(
+            kv_init(Some("TestGetData"), "TestKey", Some(path), Some("Test")),
+            false,
+        );
+        assert!(r.is_ok());
+        delete(kv_init(
+            Some("TestGetData"),
+            "TestKey",
+            Some(path),
+            Some("Test"),
+        ))
+        .ok();
+        remove_folder(path).ok();
+    }
+}
