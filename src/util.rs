@@ -51,7 +51,7 @@ pub(crate) fn create_folder(path: &str) -> NotpResult<()> {
                     path_buf.to_str().unwrap_or_default(),
                     path
                 );
-                create_dir_all(&notp_path).map_err(|e| NotpError::Io(e))
+                create_dir_all(&notp_path).map_err(NotpError::Io)
             },
         )
     }
@@ -70,7 +70,7 @@ pub(crate) fn remove_folder(path: &str) -> NotpResult<()> {
                     path_buf.to_str().unwrap_or_default(),
                     path
                 );
-                remove_dir_all(folder_path).map_err(|e| NotpError::Io(e))
+                remove_dir_all(folder_path).map_err(NotpError::Io)
             },
         )
     } else {

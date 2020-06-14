@@ -43,18 +43,16 @@ impl OTP<u32> for OtpGenerator {
         let totp = make_totp(&self.secret, time_step, epoch as i64);
         match totp {
             Ok(code) => {
-                if !(code > 99999) {
-                    return Err(NotpError::Generic(
-                        format!(
-                            "Something unexpected happened! Wait a minute and \
-                             try it later. The code I've generated is not 6 \
-                             digit. Here look: {}",
-                            code
-                        )
-                        .to_string(),
-                    ));
+                if code <= 99999 {
+                    Err(NotpError::Generic(format!(
+                        "Something unexpected happened! Wait a minute and try \
+                         it later. The code I've generated is not 6 digit. \
+                         Here look: {}",
+                        code
+                    )))
+                } else {
+                    Ok(code)
                 }
-                Ok(code)
             }
             Err(e) => Err(NotpError::OTPStringError(e)),
         }
@@ -62,7 +60,4 @@ impl OTP<u32> for OtpGenerator {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::OtpGenerator;
-    use super::OTP;
-}
+mod tests {}
