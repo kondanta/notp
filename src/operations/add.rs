@@ -56,7 +56,6 @@ mod tests {
         create_folder,
         remove_folder,
     };
-    // use magic_crypt::MagicCrypt256;
 
     fn kv_init<'a>(
         key: Option<&'a str>,
@@ -73,22 +72,22 @@ mod tests {
 
     #[test]
     fn should_insert_data() {
-        let path = "Test";
+        let path = "TestAdd";
         let _ = create_folder(path);
         let r = add(kv_init(
-            Some("TestData"),
+            Some("TestAddData"),
             "TestKey",
             Some(path),
             Some("Test"),
         ));
         assert!(r.is_ok());
         delete(kv_init(
-            Some("TestData"),
+            Some("TestAddData"),
             "TestKey",
             Some(path),
             Some("Test"),
         ))
         .ok();
-        remove_folder("Test").ok();
+        remove_folder(path).ok();
     }
 }
