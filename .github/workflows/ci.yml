@@ -72,6 +72,11 @@ jobs:
           override: true
           profile: minimal
 
+      - name: Install libc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libc-dev
+
       - name: Execute tests
         uses: actions-rs/cargo@v1
         with:
