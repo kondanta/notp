@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## _[Unreleased]_
 
-- feat: add clipboard support ([`7c5f69c`])
+- feat: add clipboard support ([`f7113e0`])
 - docs: add jilu custom config ([`8f5193c`])
 - docs: switch to jilu from clog ([`7883d83`])
 - chore: fix clippy warnings ([`b7c2344`])
@@ -297,7 +297,7 @@ greatly appreciated by the community. 💖
 
 <!-- [commits] -->
 
-[`7c5f69c`]: https://github.com/kondanta/notp/commit/7c5f69caead4719859c92dc38fd97a73be354f0b
+[`f7113e0`]: https://github.com/kondanta/notp/commit/f7113e096eaae470bba11164a44a4d55b9403c0c
 [`8f5193c`]: https://github.com/kondanta/notp/commit/8f5193cd66565d6585ff18383d38d07d70f8ef30
 [`7883d83`]: https://github.com/kondanta/notp/commit/7883d8371c636ef57578f77d4f25544c1e284937
 [`b7c2344`]: https://github.com/kondanta/notp/commit/b7c2344fe747e3961a7612042ba0c0025a01d6f8
