@@ -55,18 +55,15 @@ fn print_otp(
     // but it will probably contain some EOL kind of delimeter.
     let otp = OtpGenerator::new(token.trim()).generate(0, 30);
 
-    otp.map_or_else(
-        Err,
-        |code| {
-            if clip {
-                let mut ctx: ClipboardContext = ClipboardProvider::new()
-                    .expect("Cannot utilize OS' clipboard!");
-                ctx.set_contents(code.to_string()).unwrap_or_default();
-            }
-            println!("{}", code);
-            Ok(())
-        },
-    )
+    otp.map_or_else(Err, |code| {
+        if clip {
+            let mut ctx: ClipboardContext = ClipboardProvider::new()
+                .expect("Cannot utilize OS' clipboard!");
+            ctx.set_contents(code.to_string()).unwrap_or_default();
+        }
+        println!("{}", code);
+        Ok(())
+    })
 }
 
 #[cfg(test)]
