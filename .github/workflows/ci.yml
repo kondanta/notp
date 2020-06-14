@@ -52,4 +52,16 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -- -A clippy::tabs-in-doc-comments -D warnings
+          args: -- -D warnings
+   test:
+     name: Tests
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@master
+       - uses: actions-rs/toolchan@v1
+         with:
+           toolchain: nightly
+           override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test

@@ -9,6 +9,10 @@ use crate::otp::{
     OTP,
 };
 use crate::store::DataStore;
+use clipboard::{
+    ClipboardContext,
+    ClipboardProvider,
+};
 use magic_crypt::MagicCryptTrait;
 
 /// Generates OTP code with the demanded identifier.
@@ -21,7 +25,7 @@ use magic_crypt::MagicCryptTrait;
 /// ```
 pub(crate) fn get<T: DataStore>(
     request: Request<'_, T>,
-    quiet: bool,
+    clip: bool,
 ) -> NotpResult<()> {
     let store = request.store;
     let name = request.key.unwrap_or_default();
@@ -39,31 +43,30 @@ pub(crate) fn get<T: DataStore>(
         })?
         .decrypt_base64_to_string(token)?;
 
-    print_otp(&token, name, quiet)
+    print_otp(&token, clip)
 }
 
 // utility function for printing the OTP code.
 fn print_otp(
     token: &str,
-    name: &str,
-    quiet: bool,
+    clip: bool,
 ) -> NotpResult<()> {
     // BEWARE! Token contains /r on Windows. Haven't tried it on other platforms
     // but it will probably contain some EOL kind of delimeter.
     let otp = OtpGenerator::new(token.trim()).generate(0, 30);
 
-    match otp {
-        Ok(code) => {
-            if quiet {
-                print!("{}", code);
-                Ok(())
-            } else {
-                println!("OTP code for the {}: {}", name, code);
-                Ok(())
+    otp.map_or_else(
+        |e| Err(e),
+        |code| {
+            if clip {
+                let mut ctx: ClipboardContext = ClipboardProvider::new()
+                    .expect("Cannot utilize OS' clipboard!");
+                ctx.set_contents(code.to_string()).unwrap_or_default();
             }
-        }
-        Err(e) => Err(e),
-    }
+            println!("{}", code);
+            Ok(())
+        },
+    )
 }
 
 #[cfg(test)]

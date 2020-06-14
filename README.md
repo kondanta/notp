@@ -16,7 +16,7 @@ $ notp --help
 # shell tools and don't want to pass your secret using echo and such. Also, for the sake of 
 # simplictiy I'll keep using --key flag throughout this documentation.
 # Alrigh, lets say I'd like to add a Google account.
-$ notp --add taylan-google --key superSecretKey
+$ notp add taylan-google --key superSecretKey
 # you have to provide secret code when stdin prompts.
 # OR
 $ notp add taylan-google --stdin
@@ -55,7 +55,7 @@ $
 Generating the OTP code:
 ```bash
 $ notp get AWS --key ttaayyllaann
-OTP code for the AWS: 442659
+442659
 $ 
 ```
 
@@ -65,8 +65,8 @@ $ notp delete AWS
 AWS Deleted!
 ```
 
-Using with CLI:
+Copying OTP code into the clipboard:
 ```bash
-$ notp  get AWS --key ttaayyllaann -q
+$ notp  get AWS --key ttaayyllaann -c
 442659
 ```

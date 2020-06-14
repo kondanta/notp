@@ -52,10 +52,6 @@ pub(crate) struct DeleteCommand {
 pub(crate) struct GetCommand {
     pub name: String,
 
-    /// Suppresses the OTP output and just prints the code.
-    #[structopt(short, long)]
-    pub quiet: bool,
-
     /// Encryption key for the file that notp going to use as a data source.
     #[structopt(required_unless = "stdin", long, conflicts_with = "stdin")]
     pub key: Option<String>,
@@ -66,6 +62,10 @@ pub(crate) struct GetCommand {
     /// bash's read -s functionality.
     #[structopt(required_unless = "key", long, conflicts_with = "key")]
     pub stdin: bool,
+
+    /// Copy generated code into the clipboard.
+    #[structopt(short, long)]
+    pub clip: bool,
 }
 
 impl Opt {

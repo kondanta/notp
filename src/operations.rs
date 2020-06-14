@@ -107,7 +107,7 @@ impl Dispatcher {
                     Some(encryption_key),
                 );
 
-                match get(req, param.quiet) {
+                match get(req, param.clip) {
                     Ok(_) => (),
                     Err(e) => {
                         eprintln!(
