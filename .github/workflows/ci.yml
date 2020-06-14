@@ -53,32 +53,4 @@ jobs:
         with:
           command: clippy
           args: -- -D warnings
-  test:
-    name: Tests
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - macOS-latest
-          - windows-latest
-    steps:
-      - uses: actions/checkout@v2
 
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          override: true
-          profile: minimal
-
-      - name: Install libc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libc-dev
-
-      - name: Execute tests
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all
