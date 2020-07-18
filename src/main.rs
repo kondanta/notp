@@ -31,5 +31,5 @@ mod util;
 use operations::Dispatcher;
 
 fn main() {
- Dispatcher::dispatch()
+    Dispatcher::dispatch()
 }
