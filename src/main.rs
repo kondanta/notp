@@ -29,7 +29,6 @@ mod store;
 mod util;
 
 use operations::Dispatcher;
-use version_check::is_min_version;
 
 fn main() {
  Dispatcher::dispatch()
